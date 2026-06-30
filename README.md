@@ -1,1 +1,1 @@
-[AAAI 2026] Enhancing Control Policy Smoothness by Aligning Actions with Predictions from Preceding States
+[ECCV 2026] Geometry-Preserving in 3D Gaussian Splatting for LiDAR-Camera Extrinsic Calibration
