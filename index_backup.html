@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG" />
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG" />
+  <meta property="og:url" content="URL OF THE WEBSITE" />
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>Enhancing Control Policy Smoothness by Aligning Actions with Predictions from Preceding States </title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon/stablediffusison_photo_icon.ico">
+  <!-- <link rel="icon" type="image/x-icon" href="static/images/favicon/DALLE3_illust_icon.ico"> -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- <style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 10px;
+    }
+  </style> -->
+
+  <style>
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+
+    .item table {
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      width: 90%;
+      /* 표의 너비를 70%로 설정 */
+      font-size: 16px;
+      /* 글자 크기를 조정 */
+    }
+
+    .item th,
+    .item td {
+      padding: 10px;
+      /* 셀의 안쪽 여백을 넓힙니다. */
+    }
+
+    .thick-border {
+      border-top: 3px solid black;
+      /* 굵은 아래 경계 설정 */
+      border-collapse: collapse;
+    }
+
+    .responsive-image {
+      width: 600px;
+      /* 원하는 너비 */
+      height: 300px;
+      /* 원하는 높이 */
+      object-fit: fill;
+      /* 이미지를 비율 유지하며 잘림 방지 */
+      margin: 0 auto;
+      /* 중앙 정렬 */
+    }
+
+    .three-image {
+      width: 900px;
+      /* 원하는 너비 */
+      height: 450px;
+      /* 원하는 높이 */
+      object-fit: fill;
+      /* 이미지를 비율 유지하며 잘림 방지 */
+      margin: 0 auto;
+      /* 중앙 정렬 */
+    }
+  </style>
+  <style>
+    .tool_table,
+    .tool_table th,
+    .tool_table td {
+      border: 2px solid black;
+      /* 테두리 색상을 파란색으로 변경하고, 두께를 2px로 조정 */
+      border-collapse: collapse;
+    }
+
+    .tool_table {
+      margin: 20px auto;
+      /* 상하 마진을 20px, 좌우 마진을 자동으로 설정하여 가운데 정렬 */
+      display: block;
+      width: 70%;
+      /* 표의 너비를 50%로 변경 */
+      background-color: white;
+      /* 배경색을 연회색으로 설정 */
+    }
+
+    .tool_table th,
+    .tool_table td {
+      padding: 20px;
+      /* 셀의 안쪽 여백을 20px로 넓힙니다. */
+      text-align: left;
+      /* 텍스트를 왼쪽 정렬합니다. */
+      background-color: white;
+      /* 헤더 배경색을 파란색으로 설정 */
+      color: black;
+      /* 헤더 글자 색상을 흰색으로 설정 */
+    }
+  </style>
+
+  <style>
+    .license-text {
+      background-color: #D3D3D3;
+      /* 이 부분에서 회색 배경색을 지정합니다. */
+      padding: 15px;
+      /* 이 부분에서 텍스트와 테두리 사이의 여백을 지정합니다. */
+    }
+
+    .second-image {
+      display: flex;
+      margin: auto;
+      max-width: 300px;
+      /* 원하는 크기로 설정 */
+      max-height: 450px;
+      justify-content: center;
+      /* 중앙 정렬 */
+      align-items: center;
+      /* 중앙 정렬 */
+      object-fit: fill;
+      /* 이미지를 비율 유지하며 잘림 방지 */
+    }
+
+    .map-image {
+      display: flex;
+      margin: auto;
+      width: 300px;
+      /* 원하는 크기로 설정 */
+      height: 450px;
+      justify-content: center;
+      /* 중앙 정렬 */
+      align-items: center;
+      /* 중앙 정렬 */
+      object-fit: fill;
+      /* 이미지를 비율 유지하며 잘림 방지 */
+    }
+  </style>
+
+  <style>
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      /* 그룹 간의 간격 */
+    }
+
+    .group {
+      background: #f9f9f9;
+      /* 배경색 */
+      padding: 20px;
+      /* 여백 */
+      border-radius: 10px;
+      /* 모서리 둥글게 */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      /* 그림자 효과 */
+      overflow-y: auto;
+      /* 세로 스크롤 추가 */
+      max-height: 300px;
+      /* 최대 높이 설정 */
+    }
+
+    .group h2 {
+      margin-bottom: 10px;
+      /* 제목과 이미지 간의 간격 */
+    }
+
+    .image-item {
+      display: inline-block;
+      /* 이미지 항목을 인라인 블록으로 설정 */
+      margin: 5px;
+      /* 이미지 간의 간격 */
+    }
+
+    .image-item img {
+      width: 100px;
+      /* 이미지 너비 */
+      height: auto;
+      /* 비율 유지 */
+      border-radius: 5px;
+      /* 모서리 둥글게 */
+    }
+  </style>
+
+</head>
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">EGeometry-Preserving in 3D Gaussian Splatting for LiDAR-Camera Extrinsic Calibration</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                <!-- <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">Jeong Woon Lee</a>,</span> -->
+                Kyoleen Kwak, Daeho Kim, Jeong Woon Lee, and Hyoseok Hwang*
+                <br> {2007kkl, kdh2769, everyman123, hyoseok}@khu.ac.kr
+                <!-- <span class="author-block"> -->
+                <!-- <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Hyoseok Hwang</a>,</span> -->
+
+
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="http://airlab.khu.ac.kr/" target="_blank"> Kyung Hee University AIRLAB </a><br>ECCV 2026</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Arxiv PDF link -->
+                <span class="link-block">
+                  <a href="static/paper/GeoP_Calib.pdf" download target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <!-- Supplementary PDF link -->
+                <span class="link-block">
+                  <a href="static/paper/GeoP_Calib_Supple.pdf" download target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Supplementary</span>
+                  </a>
+                </span>
+
+                <!-- Github link -->
+                <span class="link-block">
+                  <a href="https://github.com/AIRLABkhu/GeoP-Calib" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- ArXiv abstract Link -->
+                <!-- <span class="link-block">
+                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                  </a> -->
+                </span>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <style>
+    .column h3 {
+      font-size: 24px;
+      /* 폰트 크기 조정 */
+    }
+
+    .column ul li {
+      font-size: 18px;
+      /* 폰트 크기 조정 */
+    }
+
+    .asap-item {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .image-wrapper {
+      flex: 1;
+      /* 🔥 남은 공간 전부 사용 */
+      display: flex;
+      align-items: center;
+      /* 🔥 세로 중앙 */
+      justify-content: center;
+      /* 가로 중앙 */
+    }
+
+    .asap-caption {
+      font-size: 12pt;
+      padding-bottom: 1%;
+    }
+  </style>
+
+
+  <!-- Paper abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Accurate LiDAR-camera calibration is essential for robust multi-modal perception.
+Targetless approaches avoid manual setup but remain limited by the scarcity of discriminative cross-modal features.
+Recent methods address this by reconstructing the scene within a differentiable model, enabling extrinsic optimization through dense photometric supervision.
+Among these, 3D Gaussian Splatting (3DGS) has been widely adopted as a geometric proxy that bridges LiDAR and camera within a single differentiable framework.
+However, since 3DGS was originally designed for novel view synthesis, existing methods tend to prioritize rendering quality, causing the proxy geometry to drift from the true LiDAR structure.
+We propose a framework that preserves the metric geometry of the Gaussian proxy by aggregating multi-view LiDAR observations for dense depth supervision and blocking photometric gradients from updating the Gaussian spatial parameters.
+We validate our method on public driving datasets, where it consistently outperforms existing targetless methods in calibration accuracy.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End paper abstract -->
+
+  <!-- Method carousel -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3">Method</h2>
+        <div id="results-carousel" class="carousel results-carousel" style="text-align: center;">
+
+          <!-- Similar State of ASAP -->
+          <div class="item asap-item">
+            <div class="image-wrapper">
+              <img src="static/images/figure1_sim_asap.png" alt="fail" width="45%">
+            </div>
+            <h2 class="subtitle has-text-left asap-caption">
+              <b>Figure 1.</b> Similar State of ASAP. ASAP uses the environment's transition distribution to define
+              similar states and aligns the action with the expected policy output under this distribution.
+            </h2>
+          </div>
+
+          <!-- Architecture of ASAP -->
+          <div class="item asap-item">
+            <div class="image-wrapper">
+              <img src="static/images/figure2_asap_arch.png" alt="fail" width="55%">
+            </div>
+            <h2 class="subtitle has-text-left asap-caption">
+              <b>Figure 2.</b> The implementation architecture of ASAP. A prediction head is added after the shared
+              MLP.The prediction head predicts the expected action at time step <em>s<sub>t+1</sub></em> given the state
+              at time step <em>s<sub>t</sub></em>.
+            </h2>
+          </div>
+
+          <!-- Update procedure of ASAP -->
+          <div class="item asap-item">
+            <div class="image-wrapper">
+              <img src="static/images/figure3_asap_update_flow.png" alt="fail" width="65%">
+            </div>
+            <h2 class="subtitle has-text-left asap-caption">
+              <b>Figure 3.</b> The update procedure of ASAP. The ASAP network takes <em>s<sub>t</sub></em> as input and
+              outputs both the executed action <em>a<sub>t</sub></em> and the predicted expected action at the next
+              state, <em>E[a<sub>t+1</sub>]</em>. The action head is trained to match the output of the prediction head,
+              while the prediction head learns the expected next action over the state distribution stored in the
+              buffer.
+            </h2>
+          </div>
+        </div>
+        <p style="margin-bottom:2em;"></p>
+        <h5 class="title is-5">Similar State Based on Transition Distribution</h5>
+
+        <p>
+          A key challenge in action smoothing for reinforcement learning lies in
+          defining <em>similar states</em> in a way that faithfully reflects the
+          underlying system dynamics. Prior loss-based approaches typically rely
+          on heuristic or synthetic neighborhoods, such as Gaussian perturbations
+          around the current state or interpolations along the next-state
+          direction. However, these artificially generated states often deviate
+          from the true state distribution induced by the environment, leading to
+          unstable or overly conservative regularization.
+        </p>
+
+        <p>
+          ASAP addresses this limitation by defining similar states directly from
+          the environment’s transition distribution. Given a previous state
+          <em>s<sub>t−1</sub></em>, we define the similar state distribution as the
+          set of next states sampled from the transition kernel
+          <em>P(· | s<sub>t−1</sub>)</em>. Intuitively, states that originate from
+          the same preceding state are expected to be similar from a dynamics
+          perspective, as their differences arise solely from bounded stochastic
+          disturbances.
+        </p>
+
+        <p>
+          Under mild assumptions on the transition function—namely, local
+          Lipschitz continuity with respect to noise and bounded stochastic
+          perturbations—this transition-induced definition forms a
+          <em>spatially bounded neighborhood</em>. As a result, it provides a
+          principled foundation for enforcing local Lipschitz continuity of the
+          policy without introducing synthetic samples or heuristic distance
+          thresholds.
+        </p>
+
+        <p>
+          Within this framework, ASAP enforces action consistency by aligning the
+          policy output at the current state with the expected action over the
+          similar state distribution. This alignment suppresses excessive
+          sensitivity to small state variations and directly mitigates
+          oscillatory behavior caused by transition noise.
+        </p>
+
+        <p style="margin-bottom:2em;"></p>
+        <h5 class="title is-5">Action Smoothing via Predictions from Preceding States</h5>
+
+        <p>
+          Building on the transition-induced similar state formulation, ASAP
+          introduces a practical mechanism to enforce action smoothness during
+          training. Instead of explicitly sampling multiple next states, ASAP
+          augments the policy network with an additional <em>prediction head</em>
+          that estimates the expected action at the next time step given the
+          preceding state.
+        </p>
+
+        <p>
+          Specifically, the ASAP actor consists of a shared feature extractor
+          followed by two heads: an <em>action head</em> that outputs the executed
+          action <em>a<sub>t</sub></em> from the current state
+          <em>s<sub>t</sub></em>, and a <em>prediction head</em> that predicts the
+          expected next action
+          <em>E[a<sub>t+1</sub> | s<sub>t</sub>]</em>. The action head is trained to
+          align its output with the prediction head, thereby encouraging
+          consistency across transition-induced similar states.
+        </p>
+
+        <p>
+          To stabilize training, ASAP separates the learning signals for the two
+          heads using stop-gradient operations. The prediction head learns to
+          approximate the policy’s actual outputs, while the action head treats
+          the predicted action as a fixed target. This asymmetric design avoids
+          moving-target instability and enables robust optimization.
+        </p>
+
+        <p>
+          In addition to spatial alignment, ASAP incorporates a temporal
+          regularization term that penalizes second-order differences in the
+          action sequence. This temporal loss suppresses high-frequency
+          oscillations while preserving the agent’s ability to perform rapid but
+          purposeful action changes when necessary.
+        </p>
+
+        <p>
+          The final ASAP objective combines the standard reinforcement learning
+          actor loss with spatial and temporal smoothness terms. As a result,
+          ASAP achieves smooth and stable control policies without modifying the
+          network architecture at inference time, making it readily applicable
+          to real-world robotic systems.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- End method carousel -->
+
+  <!--Evaluation -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3">Evaluation</h2>
+        <h5 class="title is-5">Evaluation Metrics</h5>
+        <p style="margin-bottom:2em;"></p>
+        <p>
+          We evaluate policies using two complementary metrics:
+          <strong>Cumulative Return (<em>re</em>)</strong> and
+          <strong>Smoothness Score (<em>sm</em>)</strong>.
+        </p>
+
+        <p>
+          <strong>Cumulative Return</strong> measures overall task performance and
+          is computed as the total accumulated reward over an episode.
+        </p>
+
+        <p>
+          <strong>Smoothness Score</strong> quantifies action oscillations based on
+          the frequency spectrum of actions.
+          Following prior work, we compute smoothness using the FFT as:
+        </p>
+
+        <p style="text-align: center;">
+          $$
+          \mathrm{Sm} = \frac{2}{n f_s} \sum_{i=1}^{n} M_i f_i
+          $$
+        </p>
+
+        <p>
+          Here, $f_i$ and $M_i$ denote the frequency and amplitude of the
+          $i$-th spectral component, and $f_s$ denotes the sampling frequency.
+          This metric computes a frequency-weighted average of action magnitudes.
+          Lower values indicate smoother and more stable control, while higher
+          values correspond to increased high-frequency action components.
+        </p>
+        <p style="margin-bottom:2em;"></p>
+        <h5 class="title is-5">Evaluation on Gymnasium</h5>
+        <p style="margin-bottom:2em;"> </p>
+        <p>
+          Experiments on the Gymnasium benchmark were conducted to validate the theoretical assumptions and design
+          principles of ASAP.
+          Gymnasium provides a set of continuous control tasks with relatively simple yet diverse dynamics, making
+          it well suited for
+          analyzing whether the transition distribution-based definition of similar states effectively suppresses
+          action oscillations.
+        </p>
+
+        <p>
+          We evaluate ASAP under both PPO and SAC settings, comparing it against prior methods using two metrics:
+          <strong>cumulative return</strong> and action smoothness.
+          The results show that ASAP consistently reduces high-frequency action oscillations while largely
+          preserving policy performance
+          across most environments, demonstrating that transition-induced similar states and prediction-based
+          alignment accurately capture
+          the underlying system dynamics.
+        </p>
+        <p style="margin-bottom:2em;"> </p>
+        <figure style="text-align: center; margin-bottom: 1em;">
+          <img src="static/images/table1_gymnasium_ppo.png" alt="fail" width="90%">
+          <figcaption class="content has-text-centered" style="word-break:normal">
+            <b>Table 1.</b> Cumulative return (re) and smoothness score (sm) on Gymnasium benchmark under PPO
+            setting. Higher re and lower sm are better. Bold indicates best, and underlined the second-best, per
+            environment. Standard deviations shown in parentheses.
+          </figcaption>
+        </figure>
+
+        <figure style="text-align: center; margin-bottom: 1em;">
+          <img src="static/images/table2_gymnasium_sac.png" alt="fail" width="90%">
+          <figcaption class="content has-text-centered" style="word-break:normal">
+            <b>Table 2.</b> Cumulative return (re) and smoothness score (sm) on Gymnasium benchmark under SAC
+            setting. Higher re and lower sm are better. Bold indicates best, and underlined the second-best, per
+            environment. Standard deviations shown in parentheses.
+          </figcaption>
+        </figure>
+
+        <h5 class="title is-5">Evaluation on Isaac-Lab</h5>
+        <p style="margin-bottom:2em;"> </p>
+        <p>
+          Experiments on Isaac-Lab were conducted to assess whether ASAP remains effective beyond standard
+          benchmarks,
+          under <strong>realistic robot dynamics and practical noise conditions</strong>.
+          Isaac-Lab provides high-fidelity physics simulation along with domain randomization and observation
+          noise,
+          enabling evaluation of policy stability and control quality in more realistic settings.
+        </p>
+
+        <p>
+          We apply ASAP to PPO-based policies and compare performance using two metrics:
+          <strong>cumulative return</strong> and action smoothness.
+          The results show that ASAP consistently reduces high-frequency action oscillations while maintaining or
+          improving
+          policy performance across multiple robotic tasks, demonstrating that transition-induced similar states
+          and
+          prediction-based alignment remain effective in robotic control scenarios.
+        </p>
+        <p style="margin-bottom:2em;"> </p>
+        <figure style="text-align: center; margin-bottom: 1em;">
+          <img src="static/images/table3_isaaclab.png" alt="fail" width="90%">
+          <figcaption class="content has-text-centered" style="word-break:normal">
+            <b>Table 3.</b> Cumulative return (re) and smoothness score (sm) for PPO Base and PPO + ASAP on the
+            Isaac-Lab environment.Higher re and lower sm are better. Bold indicates the best per environment.
+            Standard deviations shown in parentheses.
+          </figcaption>
+        </figure>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Conclusion carousel -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3">Conclusion</h2>
+
+        <h5 class="title is-5">Conclusion</h5>
+        <p style="margin-bottom:2em;"></p>
+        <p>
+          We propose ASAP, a novel action smoothing method that combines
+          transition induced similar states with prediction from preceding states.
+          ASAP effectively suppresses high-frequency action oscillations while preserving
+          policy performance, as demonstrated across Gymnasium and Isaac-Lab benchmarks.
+          The method introduces no additional inference-time overhead, making it
+          readily applicable to real-world robotic control systems.
+        </p>
+        <p style="margin-bottom:2em;"></p>
+
+        <h5 class="title is-5">Limitation</h5>
+        <p style="margin-bottom:2em;"></p>
+        <p>
+          ASAP defines similar states under the assumption of bounded transition noise.
+          In environments with excessively high noise, the induced neighborhood may become
+          overly large, potentially weakening the spatial alignment effect.
+          This limitation can be mitigated by appropriately tuning the spatial regularization strength.
+        </p>
+        <p style="margin-bottom:2em;"></p>
+
+      </div>
+    </div>
+  </section>
+  <!-- End conclusion carousel -->
+
+  <!--BibTex citation -->
+  <!-- <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>
+@InProceedings{Kwak_2026_AAAI,
+    author    = {Kwak, Kyoleen and Hwang, Hyoseok},
+    title     = {Enhancing Control Policy Smoothness by Aligning Actions with Predictions from Preceding States},
+    booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+    month     = {January},
+    year      = {2026},
+    pages     = {}
+}</code></pre>
+    </div>
+</section> -->
+  <!--End BibTex citation -->
+
+
+
+</body>
+
+</html>

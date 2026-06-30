@@ -1,0 +1,1 @@
+[AAAI 2026] Enhancing Control Policy Smoothness by Aligning Actions with Predictions from Preceding States
