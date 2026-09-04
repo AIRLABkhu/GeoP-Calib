@@ -3,31 +3,23 @@
 
 <head>
   <meta charset="utf-8">
-  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
-  <!-- Replace the content tag with appropriate information -->
-  <meta name="description" content="DESCRIPTION META TAG">
-  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG" />
-  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG" />
-  <meta property="og:url" content="URL OF THE WEBSITE" />
-  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
-  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta name="description" content="PAVE: Stabilizing the Q-Gradient Field for Policy Smoothness in Actor-Critic Methods (ICML 2026 Oral)">
+  <meta property="og:title" content="PAVE — Stabilizing the Q-Gradient Field for Policy Smoothness" />
+  <meta property="og:description" content="ICML 2026 Oral. A critic-centric regularization framework that proves and exploits the differential-geometric origin of policy non-smoothness." />
+  <meta property="og:url" content="https://airlabkhu.github.io/PAVE/" />
+  <meta property="og:image" content="static/images/q_gradient_field_walker_td3.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
-
-  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
-  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
-  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
-  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:title" content="PAVE — Stabilizing the Q-Gradient Field for Policy Smoothness">
+  <meta name="twitter:description" content="ICML 2026 Oral. Critic-centric regularization derived from an Implicit-Function-Theorem bound on policy sensitivity.">
+  <meta name="twitter:image" content="static/images/q_gradient_field_walker_td3.png">
   <meta name="twitter:card" content="summary_large_image">
-  <!-- Keywords for your paper to be indexed by-->
-  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="keywords" content="reinforcement learning, policy smoothness, critic geometry, Q-gradient field, TD3, SAC, ICML 2026">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-  <title>Enhancing Control Policy Smoothness by Aligning Actions with Predictions from Preceding States </title>
-  <link rel="icon" type="image/x-icon" href="static/images/favicon/stablediffusison_photo_icon.ico">
-  <!-- <link rel="icon" type="image/x-icon" href="static/images/favicon/DALLE3_illust_icon.ico"> -->
+  <title>PAVE: Stabilizing the Q-Gradient Field for Policy Smoothness in Actor-Critic Methods</title>
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
   <link rel="stylesheet" href="static/css/bulma.min.css">
@@ -38,194 +30,91 @@
   <link rel="stylesheet" href="static/css/index.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
   <script defer src="static/js/fontawesome.all.min.js"></script>
   <script src="static/js/bulma-carousel.min.js"></script>
   <script src="static/js/bulma-slider.min.js"></script>
   <script src="static/js/index.js"></script>
   <script>
     MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        tags: 'ams'
+      }
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
-  <!-- <style>
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-    th, td {
-        padding: 10px;
-    }
-  </style> -->
-
   <style>
-    table,
-    th,
-    td {
-      border: 1px solid black;
-      border-collapse: collapse;
-    }
-
-    .item table {
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
-      width: 90%;
-      /* 표의 너비를 70%로 설정 */
-      font-size: 16px;
-      /* 글자 크기를 조정 */
-    }
-
-    .item th,
-    .item td {
-      padding: 10px;
-      /* 셀의 안쪽 여백을 넓힙니다. */
-    }
-
-    .thick-border {
-      border-top: 3px solid black;
-      /* 굵은 아래 경계 설정 */
-      border-collapse: collapse;
-    }
-
-    .responsive-image {
-      width: 600px;
-      /* 원하는 너비 */
-      height: 300px;
-      /* 원하는 높이 */
-      object-fit: fill;
-      /* 이미지를 비율 유지하며 잘림 방지 */
-      margin: 0 auto;
-      /* 중앙 정렬 */
-    }
-
-    .three-image {
-      width: 900px;
-      /* 원하는 너비 */
-      height: 450px;
-      /* 원하는 높이 */
-      object-fit: fill;
-      /* 이미지를 비율 유지하며 잘림 방지 */
-      margin: 0 auto;
-      /* 중앙 정렬 */
-    }
-  </style>
-  <style>
-    .tool_table,
-    .tool_table th,
-    .tool_table td {
-      border: 2px solid black;
-      /* 테두리 색상을 파란색으로 변경하고, 두께를 2px로 조정 */
-      border-collapse: collapse;
-    }
-
-    .tool_table {
-      margin: 20px auto;
-      /* 상하 마진을 20px, 좌우 마진을 자동으로 설정하여 가운데 정렬 */
-      display: block;
-      width: 70%;
-      /* 표의 너비를 50%로 변경 */
-      background-color: white;
-      /* 배경색을 연회색으로 설정 */
-    }
-
-    .tool_table th,
-    .tool_table td {
-      padding: 20px;
-      /* 셀의 안쪽 여백을 20px로 넓힙니다. */
-      text-align: left;
-      /* 텍스트를 왼쪽 정렬합니다. */
-      background-color: white;
-      /* 헤더 배경색을 파란색으로 설정 */
-      color: black;
-      /* 헤더 글자 색상을 흰색으로 설정 */
-    }
-  </style>
-
-  <style>
-    .license-text {
-      background-color: #D3D3D3;
-      /* 이 부분에서 회색 배경색을 지정합니다. */
-      padding: 15px;
-      /* 이 부분에서 텍스트와 테두리 사이의 여백을 지정합니다. */
-    }
-
-    .second-image {
-      display: flex;
-      margin: auto;
-      max-width: 300px;
-      /* 원하는 크기로 설정 */
-      max-height: 450px;
-      justify-content: center;
-      /* 중앙 정렬 */
-      align-items: center;
-      /* 중앙 정렬 */
-      object-fit: fill;
-      /* 이미지를 비율 유지하며 잘림 방지 */
-    }
-
-    .map-image {
-      display: flex;
-      margin: auto;
-      width: 300px;
-      /* 원하는 크기로 설정 */
-      height: 450px;
-      justify-content: center;
-      /* 중앙 정렬 */
-      align-items: center;
-      /* 중앙 정렬 */
-      object-fit: fill;
-      /* 이미지를 비율 유지하며 잘림 방지 */
-    }
-  </style>
-
-  <style>
-    .gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      /* 그룹 간의 간격 */
-    }
-
-    .group {
-      background: #f9f9f9;
-      /* 배경색 */
-      padding: 20px;
-      /* 여백 */
-      border-radius: 10px;
-      /* 모서리 둥글게 */
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      /* 그림자 효과 */
-      overflow-y: auto;
-      /* 세로 스크롤 추가 */
-      max-height: 300px;
-      /* 최대 높이 설정 */
-    }
-
-    .group h2 {
-      margin-bottom: 10px;
-      /* 제목과 이미지 간의 간격 */
-    }
-
-    .image-item {
-      display: inline-block;
-      /* 이미지 항목을 인라인 블록으로 설정 */
-      margin: 5px;
-      /* 이미지 간의 간격 */
-    }
-
-    .image-item img {
-      width: 100px;
-      /* 이미지 너비 */
+    .pave-figure {
+      max-width: 100%;
       height: auto;
-      /* 비율 유지 */
-      border-radius: 5px;
-      /* 모서리 둥글게 */
+      margin: 0 auto;
+      display: block;
+    }
+
+    .pave-caption {
+      font-size: 12pt;
+      padding: 0.5em 0 1em;
+    }
+
+    .pave-thm {
+      background: #f6f8fa;
+      border-left: 4px solid #3273dc;
+      padding: 1em 1.2em;
+      margin: 1em 0;
+      border-radius: 4px;
+    }
+
+    .pave-thm .thm-title {
+      font-weight: 700;
+      color: #2b56a0;
+      margin-bottom: 0.4em;
+    }
+
+    .pave-proof {
+      background: #fafafa;
+      border-left: 3px solid #b5b5b5;
+      padding: 0.8em 1.1em;
+      margin: 0.8em 0 1.2em;
+      border-radius: 4px;
+      font-size: 0.97em;
+    }
+
+    .pave-proof .proof-title {
+      font-style: italic;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 0.3em;
+    }
+
+    .pave-remark {
+      background: #fffaf0;
+      border-left: 4px solid #d97706;
+      padding: 0.8em 1.1em;
+      margin: 0.8em 0 1.2em;
+      border-radius: 4px;
+      font-size: 0.97em;
+    }
+
+    .pave-remark .remark-title {
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 0.3em;
+    }
+
+    .takeaway {
+      background: #ecfdf5;
+      border-left: 4px solid #10b981;
+      padding: 0.9em 1.1em;
+      margin: 1em 0;
+      border-radius: 4px;
+    }
+
+    .takeaway b {
+      color: #065f46;
     }
   </style>
-
 </head>
 
 <body>
@@ -234,68 +123,49 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">EGeometry-Preserving in 3D Gaussian Splatting for LiDAR-Camera Extrinsic Calibration</h1>
+            <h1 class="title is-1 publication-title">
+              Stabilizing the Q-Gradient Field for Policy Smoothness in Actor-Critic Methods
+            </h1>
             <div class="is-size-5 publication-authors">
-              <!-- Paper authors -->
               <span class="author-block">
-                <!-- <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">Jeong Woon Lee</a>,</span> -->
-                Kyoleen Kwak, Daeho Kim, Jeong Woon Lee, and Hyoseok Hwang*
-                <br> {2007kkl, kdh2769, everyman123, hyoseok}@khu.ac.kr
-                <!-- <span class="author-block"> -->
-                <!-- <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Hyoseok Hwang</a>,</span> -->
-
-
+                Jeong Woon Lee<sup>*</sup>, Kyoleen Kwak<sup>*</sup>, Daeho Kim<sup>*</sup>, Hyoseok Hwang<sup>&dagger;</sup>
+                <br>
+                {everyman123, 2007kkl, daeho, hyoseok}@khu.ac.kr
+                <br>
+                <span style="font-size: 0.85em;"><sup>*</sup> Equal contribution &nbsp; <sup>&dagger;</sup> Corresponding author</span>
+              </span>
             </div>
 
             <div class="is-size-5 publication-authors">
               <span class="author-block">
-                <a href="http://airlab.khu.ac.kr/" target="_blank"> Kyung Hee University AIRLAB </a><br>ECCV 2026</span>
+                <a href="http://airlab.khu.ac.kr/" target="_blank">Kyung Hee University AIRLAB</a><br>
+                ICML 2026 (Oral)
+              </span>
             </div>
 
             <div class="column has-text-centered">
               <div class="publication-links">
-                <!-- Arxiv PDF link -->
                 <span class="link-block">
-                  <a href="static/paper/GeoP_Calib.pdf" download target="_blank" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                    </span>
+                  <a href="https://arxiv.org/abs/2601.22970" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2601.22970" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
                     <span>Paper</span>
                   </a>
                 </span>
-
-                <!-- Supplementary PDF link -->
                 <span class="link-block">
-                  <a href="static/paper/GeoP_Calib_Supple.pdf" download target="_blank" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                    </span>
-                    <span>Supplementary</span>
-                  </a>
-                </span>
-
-                <!-- Github link -->
-                <span class="link-block">
-                  <a href="https://github.com/AIRLABkhu/GeoP-Calib" target="_blank"
+                  <a href="https://github.com/AIRLABkhu/PAVE" target="_blank"
                     class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fab fa-github"></i>
-                    </span>
+                    <span class="icon"><i class="fab fa-github"></i></span>
                     <span>Code</span>
                   </a>
                 </span>
-
-                <!-- ArXiv abstract Link -->
-                <!-- <span class="link-block">
-                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
-                  class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                    <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                  </a> -->
-                </span>
-
               </div>
             </div>
           </div>
@@ -305,43 +175,7 @@
   </section>
 
 
-
-
-  <style>
-    .column h3 {
-      font-size: 24px;
-      /* 폰트 크기 조정 */
-    }
-
-    .column ul li {
-      font-size: 18px;
-      /* 폰트 크기 조정 */
-    }
-
-    .asap-item {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .image-wrapper {
-      flex: 1;
-      /* 🔥 남은 공간 전부 사용 */
-      display: flex;
-      align-items: center;
-      /* 🔥 세로 중앙 */
-      justify-content: center;
-      /* 가로 중앙 */
-    }
-
-    .asap-caption {
-      font-size: 12pt;
-      padding-bottom: 1%;
-    }
-  </style>
-
-
-  <!-- Paper abstract -->
+  <!-- Abstract -->
   <section class="section hero is-light">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
@@ -349,263 +183,897 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              Accurate LiDAR-camera calibration is essential for robust multi-modal perception.
-Targetless approaches avoid manual setup but remain limited by the scarcity of discriminative cross-modal features.
-Recent methods address this by reconstructing the scene within a differentiable model, enabling extrinsic optimization through dense photometric supervision.
-Among these, 3D Gaussian Splatting (3DGS) has been widely adopted as a geometric proxy that bridges LiDAR and camera within a single differentiable framework.
-However, since 3DGS was originally designed for novel view synthesis, existing methods tend to prioritize rendering quality, causing the proxy geometry to drift from the true LiDAR structure.
-We propose a framework that preserves the metric geometry of the Gaussian proxy by aggregating multi-view LiDAR observations for dense depth supervision and blocking photometric gradients from updating the Gaussian spatial parameters.
-We validate our method on public driving datasets, where it consistently outperforms existing targetless methods in calibration accuracy.
+              Policies learned via continuous actor-critic methods often exhibit erratic, high-frequency oscillations,
+              making them unsuitable for physical deployment. Current approaches attempt to enforce smoothness by
+              directly regularizing the policy's output. We argue that this approach treats the symptom rather than the
+              cause. In this work, we theoretically establish that policy non-smoothness is fundamentally governed by
+              the differential geometry of the critic. By applying implicit differentiation to the actor-critic
+              objective, we prove that the sensitivity of the optimal policy is bounded by the ratio of the
+              Q-function's mixed-partial derivative (noise sensitivity) to its action-space curvature (signal
+              distinctness). To empirically validate this theoretical insight, we introduce
+              <em><b>P</b>olicy-<b>A</b>ware <b>V</b>alue-field <b>E</b>qualization</em> (PAVE), a critic-centric
+              regularization framework that treats the critic as a scalar field and <em>stabilizes</em> its induced
+              action-gradient field. PAVE rectifies the learning signal by minimizing the Q-gradient volatility while
+              preserving local curvature. Experimental results demonstrate that PAVE achieves smoothness comparable to
+              policy-side smoothness regularization methods, while maintaining competitive task performance, without
+              modifying the actor.
             </p>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <!-- End paper abstract -->
 
-  <!-- Method carousel -->
+
+  <!-- Method -->
   <section class="hero is-small">
     <div class="hero-body">
-      <div class="container">
+      <div class="container is-max-desktop">
         <h2 class="title is-3">Method</h2>
-        <div id="results-carousel" class="carousel results-carousel" style="text-align: center;">
 
-          <!-- Similar State of ASAP -->
-          <div class="item asap-item">
-            <div class="image-wrapper">
-              <img src="static/images/figure1_sim_asap.png" alt="fail" width="45%">
-            </div>
-            <h2 class="subtitle has-text-left asap-caption">
-              <b>Figure 1.</b> Similar State of ASAP. ASAP uses the environment's transition distribution to define
-              similar states and aligns the action with the expected policy output under this distribution.
-            </h2>
-          </div>
+        <!-- ====================== Theory ====================== -->
+        <h4 class="title is-4">Theoretical Analysis: The Geometry of Policy Sensitivity</h4>
 
-          <!-- Architecture of ASAP -->
-          <div class="item asap-item">
-            <div class="image-wrapper">
-              <img src="static/images/figure2_asap_arch.png" alt="fail" width="55%">
-            </div>
-            <h2 class="subtitle has-text-left asap-caption">
-              <b>Figure 2.</b> The implementation architecture of ASAP. A prediction head is added after the shared
-              MLP.The prediction head predicts the expected action at time step <em>s<sub>t+1</sub></em> given the state
-              at time step <em>s<sub>t</sub></em>.
-            </h2>
-          </div>
+        <p>
+          To remediate the fundamental origin of action instability in actor-critic methods, we analyze how the
+          differential geometry of the value function dictates the behavior of the induced policy. We derive the
+          sensitivity of the greedy policy $a^{*}(s) = \arg\max_{a} Q(s, a)$ with respect to state perturbations and
+          show, via the Implicit Function Theorem (IFT), that policy smoothness is governed by specific Hessian terms
+          of the critic.
+        </p>
 
-          <!-- Update procedure of ASAP -->
-          <div class="item asap-item">
-            <div class="image-wrapper">
-              <img src="static/images/figure3_asap_update_flow.png" alt="fail" width="65%">
-            </div>
-            <h2 class="subtitle has-text-left asap-caption">
-              <b>Figure 3.</b> The update procedure of ASAP. The ASAP network takes <em>s<sub>t</sub></em> as input and
-              outputs both the executed action <em>a<sub>t</sub></em> and the predicted expected action at the next
-              state, <em>E[a<sub>t+1</sub>]</em>. The action head is trained to match the output of the prediction head,
-              while the prediction head learns the expected next action over the state distribution stored in the
-              buffer.
-            </h2>
-          </div>
+        <h5 class="title is-5">Implicit Policy Definition and Sensitivity Derivation</h5>
+
+        <p>
+          In the actor-critic paradigm, the actor $\pi_\phi(s)$ is optimized to approximate the maximizer of the
+          Q-function. Even when the actor is a neural network, its update direction is fundamentally driven by
+          $\nabla_a Q(s,\pi_\phi(s))$. The geometric regularity of the explicit maximizer
+          $a^{*}(s) = \arg\max_{a} Q(s, a)$ therefore imposes a fundamental limit on the learned policy:
+          $\pi_\phi$ cannot be smoother than $a^{*}$ without deviating from the optimal action.
+        </p>
+
+        <div class="pave-thm">
+          <div class="thm-title">Lemma 1 (Implicit Policy Jacobian).</div>
+          Let $Q : \mathcal{S} \times \mathcal{A} \to \mathbb{R}$ be twice continuously differentiable. Assume that
+          for a given state $s$, $a^{*}(s)$ is a strict local maximum and an interior point of $\mathcal{A}$, so that
+          the action Hessian $\nabla^{2}_{aa} Q(s, a^{*}(s))$ is negative definite. Then the policy Jacobian
+          $J_{\pi}(s) = \nabla_s a^{*}(s)$ is given analytically by
+          $$
+          J_{\pi}(s) \;=\; -\bigl[\nabla^{2}_{aa} Q(s, a^{*}(s))\bigr]^{-1}\, \nabla^{2}_{sa} Q(s, a^{*}(s)).
+          $$
         </div>
-        <p style="margin-bottom:2em;"></p>
-        <h5 class="title is-5">Similar State Based on Transition Distribution</h5>
 
-        <p>
-          A key challenge in action smoothing for reinforcement learning lies in
-          defining <em>similar states</em> in a way that faithfully reflects the
-          underlying system dynamics. Prior loss-based approaches typically rely
-          on heuristic or synthetic neighborhoods, such as Gaussian perturbations
-          around the current state or interpolations along the next-state
-          direction. However, these artificially generated states often deviate
-          from the true state distribution induced by the environment, leading to
-          unstable or overly conservative regularization.
-        </p>
-
-        <p>
-          ASAP addresses this limitation by defining similar states directly from
-          the environment’s transition distribution. Given a previous state
-          <em>s<sub>t−1</sub></em>, we define the similar state distribution as the
-          set of next states sampled from the transition kernel
-          <em>P(· | s<sub>t−1</sub>)</em>. Intuitively, states that originate from
-          the same preceding state are expected to be similar from a dynamics
-          perspective, as their differences arise solely from bounded stochastic
-          disturbances.
-        </p>
-
-        <p>
-          Under mild assumptions on the transition function—namely, local
-          Lipschitz continuity with respect to noise and bounded stochastic
-          perturbations—this transition-induced definition forms a
-          <em>spatially bounded neighborhood</em>. As a result, it provides a
-          principled foundation for enforcing local Lipschitz continuity of the
-          policy without introducing synthetic samples or heuristic distance
-          thresholds.
-        </p>
-
-        <p>
-          Within this framework, ASAP enforces action consistency by aligning the
-          policy output at the current state with the expected action over the
-          similar state distribution. This alignment suppresses excessive
-          sensitivity to small state variations and directly mitigates
-          oscillatory behavior caused by transition noise.
-        </p>
-
-        <p style="margin-bottom:2em;"></p>
-        <h5 class="title is-5">Action Smoothing via Predictions from Preceding States</h5>
-
-        <p>
-          Building on the transition-induced similar state formulation, ASAP
-          introduces a practical mechanism to enforce action smoothness during
-          training. Instead of explicitly sampling multiple next states, ASAP
-          augments the policy network with an additional <em>prediction head</em>
-          that estimates the expected action at the next time step given the
-          preceding state.
-        </p>
-
-        <p>
-          Specifically, the ASAP actor consists of a shared feature extractor
-          followed by two heads: an <em>action head</em> that outputs the executed
-          action <em>a<sub>t</sub></em> from the current state
-          <em>s<sub>t</sub></em>, and a <em>prediction head</em> that predicts the
-          expected next action
-          <em>E[a<sub>t+1</sub> | s<sub>t</sub>]</em>. The action head is trained to
-          align its output with the prediction head, thereby encouraging
-          consistency across transition-induced similar states.
-        </p>
-
-        <p>
-          To stabilize training, ASAP separates the learning signals for the two
-          heads using stop-gradient operations. The prediction head learns to
-          approximate the policy’s actual outputs, while the action head treats
-          the predicted action as a fixed target. This asymmetric design avoids
-          moving-target instability and enables robust optimization.
-        </p>
-
-        <p>
-          In addition to spatial alignment, ASAP incorporates a temporal
-          regularization term that penalizes second-order differences in the
-          action sequence. This temporal loss suppresses high-frequency
-          oscillations while preserving the agent’s ability to perform rapid but
-          purposeful action changes when necessary.
-        </p>
-
-        <p>
-          The final ASAP objective combines the standard reinforcement learning
-          actor loss with spatial and temporal smoothness terms. As a result,
-          ASAP achieves smooth and stable control policies without modifying the
-          network architecture at inference time, making it readily applicable
-          to real-world robotic systems.
-        </p>
-      </div>
-    </div>
-  </section>
-  <!-- End method carousel -->
-
-  <!--Evaluation -->
-  <section class="hero is-small">
-    <div class="hero-body">
-      <div class="container">
-        <h2 class="title is-3">Evaluation</h2>
-        <h5 class="title is-5">Evaluation Metrics</h5>
-        <p style="margin-bottom:2em;"></p>
-        <p>
-          We evaluate policies using two complementary metrics:
-          <strong>Cumulative Return (<em>re</em>)</strong> and
-          <strong>Smoothness Score (<em>sm</em>)</strong>.
-        </p>
-
-        <p>
-          <strong>Cumulative Return</strong> measures overall task performance and
-          is computed as the total accumulated reward over an episode.
-        </p>
-
-        <p>
-          <strong>Smoothness Score</strong> quantifies action oscillations based on
-          the frequency spectrum of actions.
-          Following prior work, we compute smoothness using the FFT as:
-        </p>
-
-        <p style="text-align: center;">
+        <div class="pave-proof">
+          <div class="proof-title">Proof.</div>
+          Since $a^{*}(s)$ is an interior extremum, it satisfies the first-order optimality condition
+          $\nabla_a Q(s, a^{*}(s)) = 0$. Treating this as a vector-valued mapping $G(s, a(s)) = 0$, the total
+          derivative with respect to $s$ gives, by the chain rule,
           $$
-          \mathrm{Sm} = \frac{2}{n f_s} \sum_{i=1}^{n} M_i f_i
+          \nabla^{2}_{sa} Q(s, a^{*}(s)) \;+\; \nabla^{2}_{aa} Q(s, a^{*}(s))\, \nabla_s a^{*}(s) \;=\; 0.
+          $$
+          By the strict-concavity assumption, $\nabla^{2}_{aa} Q(s, a^{*}(s))$ is invertible. Pre-multiplying by its
+          inverse yields the stated formula. $\blacksquare$
+        </div>
+
+        <div class="pave-remark">
+          <div class="remark-title">Remark.</div>
+          Lemma&nbsp;1 requires $a^{*}(s)$ to be an interior strict local maximum. When optimal actions lie on the
+          boundary of $\mathcal{A}$ or are not unique, the implicit function theorem does not apply and $J_\pi(s)$
+          may not be well-defined. In practice, continuous-control environments with $\tanh$-bounded actions rarely
+          saturate the boundary, and our empirical results confirm that the regularization motivated by this analysis
+          remains effective even when the assumption is not universally satisfied.
+        </div>
+
+        <p>
+          Geometrically, policy sensitivity is the product of an <em>inverse curvature</em> term and a
+          <em>mixed-partial coupling</em> term: $\nabla^{2}_{sa} Q$ acts as a forcing term that dictates how the
+          ascent direction shifts under state perturbations, while $[\nabla^{2}_{aa} Q]^{-1}$ acts as an
+          amplification factor determined by the flatness of the landscape. If the Q-surface is flat (low curvature),
+          the inverse Hessian explodes, rendering the policy hypersensitive to even negligible gradient rotations.
+        </p>
+
+        <h5 class="title is-5">Spectral Bounds on Lipschitz Continuity</h5>
+
+        <div class="pave-thm">
+          <div class="thm-title">Proposition 2 (Lipschitz Continuity Bound).</div>
+          Let $\|\cdot\|_2$ denote the spectral norm. Suppose
+          $\|\nabla^{2}_{sa} Q(s, a^{*}(s))\|_2 \le M$ and the action Hessian satisfies the strict concavity
+          condition $\lambda_{\max}(\nabla^{2}_{aa} Q(s, a^{*}(s))) \le -\mu < 0$. Then the induced greedy policy is
+          Lipschitz continuous with constant $L$ satisfying
+          $$
+          \|a^{*}(s) - a^{*}(s')\|_2 \;\le\; L\, \|s - s'\|_2,
+          \qquad
+          L \;\le\; \frac{M}{\mu}.
+          $$
+        </div>
+
+        <div class="pave-proof">
+          <div class="proof-title">Proof.</div>
+          Apply the spectral norm to the policy Jacobian from Lemma&nbsp;1 and use sub-multiplicativity:
+          $$
+          \|J_\pi(s)\|_2 \;\le\; \bigl\|[\nabla^{2}_{aa} Q]^{-1}\bigr\|_2 \cdot \|\nabla^{2}_{sa} Q\|_2 .
+          $$
+          <b>(i) Curvature bound.</b> The assumption $\lambda_{\max}(\nabla^{2}_{aa} Q) \le -\mu$ places the
+          spectrum of the Hessian inside $(-\infty, -\mu]$. The eigenvalues of the inverse Hessian are therefore
+          bounded in magnitude by $1/\mu$, giving
+          $\bigl\|[\nabla^{2}_{aa} Q]^{-1}\bigr\|_2 \le 1/\mu$.<br>
+          <b>(ii) Mixed-partial bound.</b> By hypothesis, $\|\nabla^{2}_{sa} Q\|_2 \le M$.<br>
+          Substituting and taking the supremum over $s$,
+          $L \triangleq \sup_{s} \|J_\pi(s)\|_2 \le M/\mu$. The Mean Value Inequality for vector-valued
+          differentiable functions then gives
+          $\|a^{*}(s) - a^{*}(s')\|_2 \le L\,\|s - s'\|_2 \le (M/\mu)\,\|s - s'\|_2$. $\blacksquare$
+        </div>
+
+        <div class="pave-remark">
+          <div class="remark-title">Remark.</div>
+          The condition $\lambda_{\max}(\nabla^{2}_{aa} Q(s, a^{*}(s))) \le -\mu < 0$ may not hold everywhere for
+          neural-network critics. In our experiments, unconstrained critics satisfy this condition in only
+          14&ndash;47% of visited states. The bound $L \le M/\mu$ therefore serves as a regularization motivation
+          rather than a universal guarantee. PAVE's $\mathcal{L}_{\mathrm{Curv}}$ improves satisfaction to
+          64&ndash;100% across environments.
+        </div>
+
+        <div class="takeaway">
+          <b>Theoretical implication.</b> The bound $L \le M/\mu$ shows that simply minimizing the gradient variance
+          (reducing $M$) is insufficient if the curvature $\mu$ also vanishes. Conventional regularizers tend to
+          flatten the Q-landscape, driving $\mu \to 0$, which can theoretically explode the sensitivity term
+          $\|[\nabla^{2}_{aa} Q]^{-1}\|$. PAVE is explicitly formulated to minimize $M$ while ensuring that $\mu$
+          stays strictly bounded away from zero.
+        </div>
+
+
+        <!-- ====================== PAVE losses ====================== -->
+        <p style="margin-bottom:1.5em;"></p>
+        <h4 class="title is-4">PAVE: Policy-Aware Value-field Equalization</h4>
+
+        <p>
+          PAVE directly enforces the geometric stability conditions derived above. Instead of constraining the actor,
+          PAVE regularizes the critic to <em>minimize the Lipschitz bound</em> $L \le M/\mu$ and to enforce
+          trajectory consistency. This is achieved by three synergistic objectives: (1) suppressing noise sensitivity
+          ($M$) via <em>Mixed-Partial Regularization</em>, (2) aligning temporal vector fields via <em>Vector Field
+          Consistency</em>, and (3) preserving curvature ($\mu$) via <em>Curvature Preservation</em> to prevent
+          geometric collapse. The losses below are finite-difference proxies that <em>incentivize</em> the desired
+          geometric properties rather than guaranteeing them.
+        </p>
+
+        <h5 class="title is-5">Mixed-Partial Regularization (MPR)</h5>
+
+        <p>
+          To minimize the numerator $M$ in the Lipschitz bound, we suppress the magnitude of $\nabla^{2}_{sa} Q$.
+          Direct construction of the mixed Hessian costs $\mathcal{O}(d^{2})$, which is prohibitive online. We
+          instead use a finite-difference proxy grounded in a Taylor expansion. Considering a small state
+          perturbation $\epsilon$,
+          $$
+          \nabla_a Q(s+\epsilon, a) \;=\; \nabla_a Q(s, a) + \nabla^{2}_{sa} Q(s,a)\,\epsilon + \mathcal{O}(\|\epsilon\|^{2}),
+          $$
+          so $\|\nabla_a Q(s+\epsilon, a) - \nabla_a Q(s, a)\|$ is an efficient proxy for the Hessian-vector product
+          $\|\nabla^{2}_{sa} Q\,\epsilon\|$. This motivates
+        </p>
+
+        <p style="text-align:center;">
+          $$
+          \mathcal{L}_{\mathrm{MPR}}(\theta)
+          \;=\;
+          \mathbb{E}_{\substack{(s,a)\sim\mathcal{D}\\ \epsilon \sim \mathcal{N}(0,\sigma^{2}I)}}
+          \Bigl[\;
+            \bigl\| \nabla_a Q(s+\epsilon, a) - \nabla_a Q(s, a) \bigr\|_2^{2}
+          \;\Bigr].
           $$
         </p>
 
         <p>
-          Here, $f_i$ and $M_i$ denote the frequency and amplitude of the
-          $i$-th spectral component, and $f_s$ denotes the sampling frequency.
-          This metric computes a frequency-weighted average of action magnitudes.
-          Lower values indicate smoother and more stable control, while higher
-          values correspond to increased high-frequency action components.
+          <b>Formal justification.</b> Substituting the linear approximation and integrating over the isotropic
+          Gaussian noise $\epsilon$,
+          $$
+          \mathcal{L}_{\mathrm{MPR}} \;\approx\;
+          \mathbb{E}_\epsilon\!\left[\,\epsilon^{\top} (\nabla^{2}_{sa} Q)^{\top} (\nabla^{2}_{sa} Q)\, \epsilon\,\right]
+          \;=\; \sigma^{2}\,\|\nabla^{2}_{sa} Q\|_F^{2}.
+          $$
+          Since the spectral norm is upper-bounded by the Frobenius norm ($\|A\|_2 \le \|A\|_F$), minimizing
+          $\mathcal{L}_{\mathrm{MPR}}$ encourages a smaller upper bound on $M$.
         </p>
-        <p style="margin-bottom:2em;"></p>
-        <h5 class="title is-5">Evaluation on Gymnasium</h5>
-        <p style="margin-bottom:2em;"> </p>
+
+        <h5 class="title is-5">Vector Field Consistency (VFC)</h5>
+
         <p>
-          Experiments on the Gymnasium benchmark were conducted to validate the theoretical assumptions and design
-          principles of ASAP.
-          Gymnasium provides a set of continuous control tasks with relatively simple yet diverse dynamics, making
-          it well suited for
-          analyzing whether the transition distribution-based definition of similar states effectively suppresses
-          action oscillations.
+          MPR enforces spatial smoothness via isotropic perturbations, but stable robotic control also requires
+          <em>temporal</em> coherence along trajectories. Interpreting $\nabla_a Q(s, a)$ as the score function of an
+          implicit Boltzmann policy $p(a\mid s) \propto \exp(Q(s,a))$, we frame temporal stability as minimizing the
+          distributional shift of the policy across consecutive states &mdash; a Fisher-divergence-style objective:
+        </p>
+
+        <p style="text-align:center;">
+          $$
+          \mathcal{L}_{\mathrm{VFC}}(\theta)
+          \;=\;
+          \mathbb{E}_{(s_t, a_t, s_{t+1}) \sim \mathcal{D}}
+          \Bigl[\;
+            \bigl\| \nabla_a Q(s_t, a_t) - \nabla_a Q(s_{t+1}, a_t) \bigr\|_2^{2}
+          \;\Bigr].
+          $$
         </p>
 
         <p>
-          We evaluate ASAP under both PPO and SAC settings, comparing it against prior methods using two metrics:
-          <strong>cumulative return</strong> and action smoothness.
-          The results show that ASAP consistently reduces high-frequency action oscillations while largely
-          preserving policy performance
-          across most environments, demonstrating that transition-induced similar states and prediction-based
-          alignment accurately capture
-          the underlying system dynamics.
+          <b>Formal justification.</b> Using the first-order expansion $s_{t+1} \approx s_t + \Delta s_t$,
+          $$
+          \bigl\|\nabla_a Q(s_{t+1}, a_t) - \nabla_a Q(s_t, a_t)\bigr\|_2^{2}
+          \;\approx\;
+          \bigl\|\nabla^{2}_{sa} Q(s_t, a_t)\, \Delta s_t\bigr\|_2^{2}.
+          $$
+          Whereas MPR reduces $M$ globally, VFC encourages a smaller $M$ specifically along the state transitions
+          imposed by the environment dynamics ($\nabla^{2}_{sa} Q\,\Delta s_t$). This mitigates the "chattering"
+          effect caused by conflicting gradients at adjacent timesteps.
         </p>
-        <p style="margin-bottom:2em;"> </p>
-        <figure style="text-align: center; margin-bottom: 1em;">
-          <img src="static/images/table1_gymnasium_ppo.png" alt="fail" width="90%">
-          <figcaption class="content has-text-centered" style="word-break:normal">
-            <b>Table 1.</b> Cumulative return (re) and smoothness score (sm) on Gymnasium benchmark under PPO
-            setting. Higher re and lower sm are better. Bold indicates best, and underlined the second-best, per
-            environment. Standard deviations shown in parentheses.
+
+        <h5 class="title is-5">Curvature Preservation (Curv)</h5>
+
+        <p>
+          Minimizing $\mathcal{L}_{\mathrm{MPR}}$ in isolation introduces a pathological risk: the network may
+          collapse $Q$ to a trivial flat plane (i.e.\ $\nabla_a Q \approx 0$ everywhere) to satisfy the smoothness
+          penalty. By Proposition&nbsp;2, if $Q$ becomes flat, $\|[\nabla^{2}_{aa} Q]^{-1}\|$ diverges, paradoxically
+          amplifying policy sensitivity. To preclude this "over-smoothing" collapse, we enforce a curvature lower
+          bound:
+        </p>
+
+        <p style="text-align:center;">
+          $$
+          \mathcal{L}_{\mathrm{Curv}}(\theta)
+          \;=\;
+          \mathbb{E}_{\substack{(s,a) \sim \mathcal{D}\\ v \sim p(v)}}
+          \Bigl[\;
+            \max\!\bigl(0,\; v^{\top} \nabla^{2}_{aa} Q(s, a)\, v + \delta \bigr)
+          \;\Bigr],
+          $$
+        </p>
+
+        <p>
+          where $\delta > 0$ is the minimum required sharpness. Computational efficiency is preserved by Hutchinson's
+          trace estimator with random Rademacher vectors $v$. To enable a valid Hessian computation we use SiLU
+          activations in the critic to ensure $C^{2}$ continuity.
+        </p>
+
+        <p>
+          <b>Formal justification.</b> This regularizer explicitly targets the denominator $\mu$ in the Lipschitz
+          bound $L \le M/\mu$. By penalizing projected curvature values $v^{\top} \nabla^{2}_{aa} Q\, v$ that exceed
+          $-\delta$, this objective incentivizes concavity via Hutchinson's trace estimator, which controls the
+          trace rather than individual eigenvalues. This encourages the maximum eigenvalue to remain negative,
+          helping to keep the inverse Hessian norm bounded and reducing sensitivity.
+        </p>
+
+        <h5 class="title is-5">Total Objective</h5>
+
+        <p>
+          The composite objective for the critic parameter $\theta$ is a weighted sum of the standard temporal-difference
+          regression loss and the three geometric regularizers:
+        </p>
+
+        <p style="text-align:center;">
+          $$
+          \mathcal{L}(\theta)
+          \;=\;
+          \mathcal{L}_{\mathrm{TD}}(\theta)
+          \;+\; \lambda_{1}\, \mathcal{L}_{\mathrm{MPR}}(\theta)
+          \;+\; \lambda_{2}\, \mathcal{L}_{\mathrm{VFC}}(\theta)
+          \;+\; \lambda_{3}\, \mathcal{L}_{\mathrm{Curv}}(\theta).
+          $$
+        </p>
+
+        <p>
+          Crucially, these geometric regularizers are applied <em>solely as auxiliary losses to the critic</em>. The
+          actor update mechanism remains unchanged, using standard policy gradients while benefiting from the paved,
+          well-conditioned Q-gradient landscape.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Quantitative Results -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3">Quantitative Results</h2>
+
+        <p>
+          We evaluate PAVE on six Gymnasium / MuJoCo continuous-control environments
+          (LunarLander, Pendulum, Reacher, Ant, Hopper, Walker2d) under both TD3 and
+          SAC. All methods, including baselines, are re-trained with SiLU activations
+          ("SiLU-unified") to remove confounders from the activation choice. We
+          report cumulative return ($re$, higher is better) and the FFT-based
+          smoothness score ($sm$, lower is better) following Mysore et al. (2021)
+          and Christmann et al. (2024). Standard deviations are over five
+          independent runs. <b>Bold</b> indicates the best and <u>underline</u> the
+          second-best per environment.
+        </p>
+
+        <p style="margin-bottom:1.2em;"></p>
+
+        <h5 class="title is-5">Table 1. TD3 (SiLU-unified)</h5>
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-fullwidth has-text-centered" style="font-size:0.85em;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:middle;">Method</th>
+                <th colspan="2">LunarLander</th>
+                <th colspan="2">Pendulum</th>
+                <th colspan="2">Reacher</th>
+                <th colspan="2">Ant</th>
+                <th colspan="2">Hopper</th>
+                <th colspan="2">Walker</th>
+              </tr>
+              <tr>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Base</td>
+                <td>227.8<br><small>(74.1)</small></td><td>1.809<br><small>(1.311)</small></td>
+                <td>&minus;168.7<br><small>(77.9)</small></td><td>1.590<br><small>(0.571)</small></td>
+                <td><u>&minus;3.55</u><br><small>(1.32)</small></td><td>0.053<br><small>(0.014)</small></td>
+                <td>4299<br><small>(1499)</small></td><td>2.039<br><small>(0.400)</small></td>
+                <td>3056<br><small>(888)</small></td><td>2.715<br><small>(0.483)</small></td>
+                <td>4834<br><small>(423)</small></td><td>1.990<br><small>(0.208)</small></td>
+              </tr>
+              <tr>
+                <td>CAPS</td>
+                <td><u>249.0</u><br><small>(40.3)</small></td><td>0.702<br><small>(0.291)</small></td>
+                <td>&minus;175.2<br><small>(79.3)</small></td><td><u>0.464</u><br><small>(0.165)</small></td>
+                <td>&minus;3.58<br><small>(1.35)</small></td><td>0.047<br><small>(0.011)</small></td>
+                <td>4624<br><small>(1190)</small></td><td>2.135<br><small>(0.256)</small></td>
+                <td><b>3609</b><br><small>(33)</small></td><td>1.919<br><small>(0.373)</small></td>
+                <td><u>4913</u><br><small>(1383)</small></td><td>1.600<br><small>(0.306)</small></td>
+              </tr>
+              <tr>
+                <td>GRAD</td>
+                <td>245.1<br><small>(73.4)</small></td><td><u>0.669</u><br><small>(0.184)</small></td>
+                <td><b>&minus;167.6</b><br><small>(75.6)</small></td><td>0.689<br><small>(0.139)</small></td>
+                <td><b>&minus;3.55</b><br><small>(1.36)</small></td><td><u>0.041</u><br><small>(0.012)</small></td>
+                <td><b>5538</b><br><small>(845)</small></td><td><u>1.796</u><br><small>(0.187)</small></td>
+                <td><u>3317</u><br><small>(648)</small></td><td><u>1.642</u><br><small>(0.405)</small></td>
+                <td>4788<br><small>(783)</small></td><td><u>1.366</u><br><small>(0.194)</small></td>
+              </tr>
+              <tr>
+                <td>ASAP</td>
+                <td>168.4<br><small>(147.0)</small></td><td>2.055<br><small>(1.300)</small></td>
+                <td>&minus;170.2<br><small>(80.7)</small></td><td>1.970<br><small>(0.768)</small></td>
+                <td>&minus;3.56<br><small>(1.35)</small></td><td>0.051<br><small>(0.014)</small></td>
+                <td><u>4765</u><br><small>(1554)</small></td><td>2.065<br><small>(0.413)</small></td>
+                <td>3229<br><small>(553)</small></td><td>1.991<br><small>(0.259)</small></td>
+                <td>4740<br><small>(799)</small></td><td>1.616<br><small>(0.284)</small></td>
+              </tr>
+              <tr style="background:#f0f7ff;">
+                <td><b>PAVE</b></td>
+                <td><b>264.5</b><br><small>(24.9)</small></td><td><b>0.541</b><br><small>(0.290)</small></td>
+                <td><u>&minus;167.6</u><br><small>(77.5)</small></td><td><b>0.351</b><br><small>(0.118)</small></td>
+                <td>&minus;4.02<br><small>(1.34)</small></td><td><b>0.039</b><br><small>(0.013)</small></td>
+                <td>4649<br><small>(1443)</small></td><td><b>1.768</b><br><small>(0.315)</small></td>
+                <td>3305<br><small>(461)</small></td><td><b>0.950</b><br><small>(0.285)</small></td>
+                <td><b>5563</b><br><small>(451)</small></td><td><b>1.272</b><br><small>(0.172)</small></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="content">
+          <p>
+            In the TD3 setting, the results validate the theoretical premise that
+            stabilizing the Q-gradient field naturally induces policy smoothness
+            without sacrificing performance. While baseline methods often exhibited
+            a trade-off where improved smoothness came at the cost of reduced
+            returns, PAVE consistently maintained or improved task performance.
+            Most notably, on Walker, PAVE achieved both the highest cumulative
+            return ($re = 5563$) and the best smoothness score ($sm = 1.272$). For
+            deterministic policies, which are particularly prone to overfitting to
+            sharp gradient irregularities, rectifying the critic's geometry proves
+            to be a highly effective strategy.
+          </p>
+        </div>
+
+        <p style="margin-bottom:1.5em;"></p>
+
+        <h5 class="title is-5">Table 2. SAC (SiLU-unified)</h5>
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-fullwidth has-text-centered" style="font-size:0.85em;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:middle;">Method</th>
+                <th colspan="2">LunarLander</th>
+                <th colspan="2">Pendulum</th>
+                <th colspan="2">Reacher</th>
+                <th colspan="2">Ant</th>
+                <th colspan="2">Hopper</th>
+                <th colspan="2">Walker</th>
+              </tr>
+              <tr>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+                <th>$re\uparrow$</th><th>$sm\downarrow$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SAC Base</td>
+                <td>160.3<br><small>(135.3)</small></td><td>0.434<br><small>(0.187)</small></td>
+                <td><b>&minus;163.1</b><br><small>(74.5)</small></td><td>0.548<br><small>(0.173)</small></td>
+                <td>&minus;3.73<br><small>(1.37)</small></td><td>0.053<br><small>(0.016)</small></td>
+                <td>5276<br><small>(1029)</small></td><td>1.941<br><small>(0.289)</small></td>
+                <td><u>3481</u><br><small>(98)</small></td><td>0.773<br><small>(0.069)</small></td>
+                <td><u>4907</u><br><small>(283)</small></td><td>0.748<br><small>(0.063)</small></td>
+              </tr>
+              <tr>
+                <td>CAPS</td>
+                <td><b>270.9</b><br><small>(19.6)</small></td><td>0.271<br><small>(0.051)</small></td>
+                <td>&minus;166.1<br><small>(76.9)</small></td><td><u>0.338</u><br><small>(0.118)</small></td>
+                <td><u>&minus;3.69</u><br><small>(1.32)</small></td><td><u>0.048</u><br><small>(0.014)</small></td>
+                <td>5447<br><small>(884)</small></td><td>1.843<br><small>(0.241)</small></td>
+                <td>3442<br><small>(52)</small></td><td>0.660<br><small>(0.110)</small></td>
+                <td>4689<br><small>(178)</small></td><td>0.776<br><small>(0.071)</small></td>
+              </tr>
+              <tr>
+                <td>GRAD</td>
+                <td>256.6<br><small>(38.2)</small></td><td>0.252<br><small>(0.063)</small></td>
+                <td>&minus;163.7<br><small>(74.5)</small></td><td>0.377<br><small>(0.111)</small></td>
+                <td>&minus;3.74<br><small>(1.29)</small></td><td><b>0.046</b><br><small>(0.013)</small></td>
+                <td><b>5729</b><br><small>(604)</small></td><td>1.632<br><small>(0.103)</small></td>
+                <td>3315<br><small>(407)</small></td><td>0.581<br><small>(0.072)</small></td>
+                <td>4887<br><small>(211)</small></td><td><u>0.572</u><br><small>(0.052)</small></td>
+              </tr>
+              <tr>
+                <td>ASAP</td>
+                <td><u>268.6</u><br><small>(20.8)</small></td><td><u>0.183</u><br><small>(0.033)</small></td>
+                <td><u>&minus;163.5</u><br><small>(74.7)</small></td><td>0.362<br><small>(0.109)</small></td>
+                <td><b>&minus;3.66</b><br><small>(1.31)</small></td><td>0.048<br><small>(0.015)</small></td>
+                <td><u>5707</u><br><small>(852)</small></td><td><b>1.404</b><br><small>(0.088)</small></td>
+                <td>3077<br><small>(715)</small></td><td><b>0.404</b><br><small>(0.059)</small></td>
+                <td>4731<br><small>(209)</small></td><td><b>0.557</b><br><small>(0.069)</small></td>
+              </tr>
+              <tr style="background:#f0f7ff;">
+                <td><b>PAVE</b></td>
+                <td>265.8<br><small>(21.4)</small></td><td><b>0.142</b><br><small>(0.028)</small></td>
+                <td>&minus;165.4<br><small>(75.5)</small></td><td><b>0.290</b><br><small>(0.130)</small></td>
+                <td>&minus;3.71<br><small>(1.31)</small></td><td>0.052<br><small>(0.014)</small></td>
+                <td>5706<br><small>(774)</small></td><td><u>1.604</u><br><small>(0.146)</small></td>
+                <td><b>3489</b><br><small>(38)</small></td><td><u>0.556</u><br><small>(0.139)</small></td>
+                <td><b>4954</b><br><small>(250)</small></td><td>0.584<br><small>(0.020)</small></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="content">
+          <p>
+            The SAC setting offers deeper insight into the characteristics of our
+            method. In low-dimensional tasks such as Reacher, policy-side
+            regularizers like GRAD and ASAP remain competitive in smoothness,
+            suggesting that direct policy constraints are effective for simpler
+            control manifolds; PAVE itself attains the best smoothness on
+            LunarLander ($sm = 0.142$). However, the distinct advantage of PAVE
+            emerges in high-dimensional environments with complex dynamics. On
+            Walker, PAVE secures the highest cumulative return ($re = 4954$) while
+            also achieving the strongest smoothness on LunarLander and Pendulum.
+            On Ant, where GRAD achieves the highest return ($re = 5729$) at the
+            cost of smoothness ($sm = 1.632$) and ASAP achieves the best
+            smoothness ($sm = 1.404$) at a lower return, PAVE attains a competitive
+            balance of both metrics ($re = 5706$, $sm = 1.604$). We attribute this
+            to the fact that high-dimensional state&ndash;action spaces inherently
+            exhibit more volatile curvature and frequent gradient spikes; in such
+            chaotic landscapes, our critic-centric regularization effectively
+            <em>paves</em> the optimization path, providing a stable learning signal
+            that policy-side constraints alone fail to capture.
+          </p>
+        </div>
+
+        <div class="takeaway" style="margin-top:1.4em;">
+          <b>Takeaway.</b> Across two off-policy backbones and six environments,
+          PAVE wins or ties for the best smoothness in 8 / 12 settings while
+          remaining competitive on cumulative return &mdash; <em>without modifying
+          the actor</em>. This empirically confirms the theoretical prediction
+          that policy non-smoothness can be addressed by reshaping the critic's
+          differential geometry rather than by output-side regularization of the
+          actor.
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Empirical Validation of the Theory -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3">Empirical Validation of the Theory</h2>
+
+        <p>
+          The bound $L \le M / \mu$ in Proposition&nbsp;2 makes a number of
+          falsifiable predictions about how the critic's geometry should
+          behave under regularization. This section tests them directly,
+          using the additional experiments developed during the rebuttal
+          process and now reported in the appendix of the paper.
+        </p>
+
+        <!-- (a) Direct measurement of M and mu -->
+        <p style="margin-bottom:1.2em;"></p>
+        <h5 class="title is-5">(a) Does PAVE actually reduce $M$ and preserve $\mu$?</h5>
+
+        <p>
+          We compute the <em>full</em> mixed Hessian $\nabla^{2}_{sa} Q$ via
+          autograd on trained critics and report
+          $M_{\sup} = \sup\, \|\nabla^{2}_{sa} Q\|_{2}$ (largest singular value)
+          as a measurement of $M$. We also report the
+          <em>negative-definiteness rate</em> &mdash; the fraction of visited
+          $(s, a)$ at which all eigenvalues of $\nabla^{2}_{aa} Q$ are
+          strictly negative &mdash; as a measurement of whether the strict
+          concavity assumption (and hence $\mu > 0$) holds in practice.
+        </p>
+
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-fullwidth has-text-centered" style="font-size:0.88em;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:middle;">Method</th>
+                <th colspan="6">$M_{\sup} = \sup \|\nabla^{2}_{sa} Q\|_{2}\ \downarrow$</th>
+              </tr>
+              <tr>
+                <th>Lunar</th><th>Pend</th><th>Reach</th><th>Ant</th><th>Hop</th><th>Walk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Base</td><td>990</td><td>447</td><td><b>16</b></td><td>8067</td><td>8831</td><td>1923</td></tr>
+              <tr><td>CAPS</td><td>1218</td><td>431</td><td>24</td><td>6452</td><td>1070</td><td>1624</td></tr>
+              <tr><td>GRAD</td><td>1273</td><td>338</td><td>18</td><td>7920</td><td>2479</td><td>1990</td></tr>
+              <tr><td>ASAP</td><td>1227</td><td>393</td><td>17</td><td>7964</td><td>27627</td><td>1772</td></tr>
+              <tr style="background:#f0f7ff;"><td><b>PAVE</b></td><td><b>151</b></td><td><b>210</b></td><td>26</td><td><b>5962</b></td><td><b>934</b></td><td><b>643</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-fullwidth has-text-centered" style="font-size:0.88em;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:middle;">Method</th>
+                <th colspan="6">Negative-definiteness rate of $\nabla^{2}_{aa} Q$\ $\uparrow$</th>
+              </tr>
+              <tr>
+                <th>Lunar</th><th>Pend</th><th>Reach</th><th>Ant</th><th>Hop</th><th>Walk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Base</td><td>0.352</td><td>0.466</td><td><b>1.000</b></td><td>0.174</td><td>0.259</td><td>0.141</td></tr>
+              <tr style="background:#f0f7ff;"><td><b>PAVE</b></td><td><b>0.842</b></td><td><b>0.995</b></td><td>0.994</td><td><b>0.659</b></td><td><b>0.856</b></td><td><b>0.637</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          PAVE attains the lowest $M_{\sup}$ in 5 / 6 environments &mdash;
+          a 2&times; to 9.5&times; reduction over Base &mdash; while
+          simultaneously raising the strict-concavity satisfaction rate
+          from 14&ndash;47&thinsp;% under unregularized critics to
+          64&ndash;100&thinsp;%. This is exactly the joint behaviour the
+          bound $L \le M / \mu$ asks for: <em>shrink the numerator, hold
+          the denominator</em>. Policy-side regularizers (CAPS, GRAD,
+          ASAP) leave $M$ essentially untouched and in some cases
+          (Hopper / ASAP) make it dramatically worse.
+        </p>
+
+
+        <!-- (b) Direct evidence of unstable Q-gradient -->
+        <p style="margin-bottom:1.2em;"></p>
+        <h5 class="title is-5">(b) Is the Q-gradient field actually geometrically unstable?</h5>
+
+        <p>
+          The theory motivates PAVE by claiming that the Q-gradient field
+          $\nabla_a Q$ "rotates drastically with infinitesimal state
+          perturbations". We test this directly by computing the cosine
+          similarity between consecutive Q-gradients
+          $\nabla_a Q(s_t, a_t)$ and $\nabla_a Q(s_{t+1}, a_{t+1})$ along
+          rollouts. A negative cosine = a sign flip = the critic
+          delivers <em>contradictory</em> update signals at adjacent
+          states.
+        </p>
+
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-fullwidth has-text-centered" style="font-size:0.88em;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:middle;">Env</th>
+                <th colspan="2">mean cosine $\uparrow$</th>
+                <th colspan="2">flip rate ($\cos < 0$) $\downarrow$</th>
+              </tr>
+              <tr>
+                <th>Base</th><th>PAVE</th><th>Base</th><th>PAVE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>LunarLander</td><td>0.593</td><td><b>0.901</b></td><td>0.184</td><td><b>0.033</b></td></tr>
+              <tr><td>Pendulum</td><td>0.491</td><td><b>0.954</b></td><td>0.254</td><td><b>0.023</b></td></tr>
+              <tr><td>Reacher</td><td>0.950</td><td><b>0.968</b></td><td>0.016</td><td><b>0.010</b></td></tr>
+              <tr><td>Ant</td><td>0.153</td><td><b>0.183</b></td><td>0.355</td><td><b>0.333</b></td></tr>
+              <tr><td>Hopper</td><td>0.566</td><td><b>0.755</b></td><td>0.165</td><td><b>0.073</b></td></tr>
+              <tr><td>Walker</td><td>0.635</td><td><b>0.835</b></td><td>0.090</td><td><b>0.014</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          PAVE reduces the flip rate by <b>2&ndash;11&times;</b> in 4 / 6
+          environments (Pendulum 25.4&thinsp;% &rarr; 2.3&thinsp;%,
+          Walker 9.0&thinsp;% &rarr; 1.4&thinsp;%, LunarLander
+          18.4&thinsp;% &rarr; 3.3&thinsp;%, Hopper 16.5&thinsp;% &rarr;
+          7.3&thinsp;%). This is a <em>direct</em> empirical confirmation
+          of the geometric-instability premise that the theory uses to
+          motivate critic-side regularization.
+        </p>
+
+
+        <!-- (c) Critic-centric baselines -->
+        <p style="margin-bottom:1.2em;"></p>
+        <h5 class="title is-5">(c) Critic-centric baselines: is it really $M$ <em>and</em> $\mu$?</h5>
+
+        <p>
+          The bound says reducing $M$ <em>alone</em> is not enough: if
+          $\mu$ collapses, the inverse Hessian explodes and policy
+          sensitivity actually grows. We test this by comparing PAVE
+          against two existing critic-side regularizers that act on
+          $M$-like quantities only:
+        </p>
+
+        <ul>
+          <li><b>SN-Critic</b> &mdash; spectral normalization on the
+            critic. Suppresses $M$ and $\mu$ <em>indiscriminately</em>.</li>
+          <li><b>GP-Critic</b> &mdash; gradient penalty
+            $\lambda \|\nabla_a Q\|^{2}$. Reduces $M$ but provides no
+            mechanism for preserving $\mu$.</li>
+        </ul>
+
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-fullwidth has-text-centered" style="font-size:0.88em;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:middle;">Method (Lunar / Walker, TD3+SiLU)</th>
+                <th>$sm \downarrow$</th>
+                <th>$re \uparrow$</th>
+                <th>$M_{\sup} \downarrow$</th>
+                <th>Neg Def $\uparrow$</th>
+              </tr>
+              <tr><td></td><td></td><td></td><td></td></tr>
+            </thead>
+            <tbody>
+              <tr><td>Base</td><td>1.81 / 1.99</td><td>228 / 4834</td><td>990 / 1923</td><td>0.35 / 0.14</td></tr>
+              <tr><td>SN-Critic</td><td>0.00 / 0.00</td><td>&minus;970 / 14</td><td>0.1 / &mdash;</td><td>0.40 / 0.18</td></tr>
+              <tr><td>GP-Critic</td><td>2.18 / 1.66</td><td>202 / 5011</td><td>882 / 1090</td><td>0.37 / 0.15</td></tr>
+              <tr style="background:#f0f7ff;"><td><b>PAVE</b></td><td><b>0.54 / 1.27</b></td><td><b>264 / 5563</b></td><td><b>151 / 643</b></td><td><b>0.84 / 0.64</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          The result is exactly what the theory predicts. <b>SN-Critic</b>
+          collapses both terms and trains a near-constant policy
+          ($re = -970$ on Lunar). <b>GP-Critic</b> reduces $M$ moderately
+          but leaves $\mu$ at the Base level, and its smoothness either
+          worsens (Lunar) or improves only marginally (Walker). Only
+          <b>PAVE</b> &mdash; which simultaneously suppresses $M$ via
+          MPR/VFC and lower-bounds $\mu$ via Curv &mdash; attains both
+          high return and low smoothness. The bound $L \le M / \mu$ is
+          not a decoration: <em>both</em> terms must be controlled.
+        </p>
+
+
+        <!-- (d) Factorial ablation -->
+        <p style="margin-bottom:1.2em;"></p>
+        <h5 class="title is-5">(d) $\mathcal{L}_{\mathrm{Curv}}$ is a prerequisite, not an option</h5>
+
+        <p>
+          A full $2^{3}$ factorial ablation of (MPR, VFC, Curv) on Walker
+          isolates each term. The crucial row is <b>MPR + VFC without
+          Curv</b>: removing the curvature term alone makes smoothness
+          <em>worse than the unregularized baseline</em>.
+        </p>
+
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-fullwidth has-text-centered" style="font-size:0.88em;">
+            <thead>
+              <tr>
+                <th>Configuration</th>
+                <th>Walker $re \uparrow$</th>
+                <th>Walker $sm \downarrow$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Base</td><td>4589</td><td>1.828</td></tr>
+              <tr><td>MPR only</td><td>5059</td><td>1.754</td></tr>
+              <tr><td>VFC only</td><td>4788</td><td>1.823</td></tr>
+              <tr style="background:#fff5f5;"><td><b>MPR + VFC (no Curv)</b></td><td>5010</td><td><b>2.095</b> &nbsp; <small>(worse than Base!)</small></td></tr>
+              <tr><td>Curv only</td><td>4896</td><td>1.650</td></tr>
+              <tr><td>MPR + Curv</td><td>5177</td><td>1.718</td></tr>
+              <tr><td>VFC + Curv</td><td>5537</td><td>1.918</td></tr>
+              <tr style="background:#f0f7ff;"><td><b>MPR + VFC + Curv (Full PAVE)</b></td><td><b>5502</b></td><td><b>1.483</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          This is a direct empirical confirmation of the theory: when only
+          $M$ is suppressed, the network collapses curvature
+          ($\mu \to 0$), the inverse Hessian
+          $\bigl\| [\nabla^{2}_{aa} Q]^{-1} \bigr\|$ blows up, and
+          policy sensitivity actually <em>grows</em>. Only the full PAVE
+          objective &mdash; which guards the denominator with $L_{\mathrm{Curv}}$
+          &mdash; achieves the best smoothness <em>and</em> a competitive
+          return.
+        </p>
+
+
+        <!-- (e) Critic-side suffices -->
+        <p style="margin-bottom:1.2em;"></p>
+        <h5 class="title is-5">(e) Does the actor still need its own smoothing?</h5>
+
+        <p>
+          Lemma&nbsp;1 says the actor inherits the smoothness of the
+          implicit greedy policy $a^{*}(s)$, which is determined entirely
+          by the critic's geometry. If that argument is correct, adding
+          an actor-side smoothness regularizer on top of PAVE should be
+          essentially redundant. We test this by combining PAVE with
+          CAPS, a representative actor-side smoothness regularizer, on
+          LunarLander (TD3, SiLU):
+        </p>
+
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-fullwidth has-text-centered" style="font-size:0.88em;">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>$sm \downarrow$</th>
+                <th>$re \uparrow$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Base</td><td>1.809</td><td>227.8</td></tr>
+              <tr><td>CAPS (actor-side)</td><td>0.702</td><td>249.0</td></tr>
+              <tr style="background:#f0f7ff;"><td><b>PAVE (critic-side)</b></td><td><b>0.541</b></td><td><b>264.5</b></td></tr>
+              <tr><td>CAPS + PAVE</td><td>0.543</td><td>264.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          PAVE alone already achieves the best smoothness and the best
+          return; adding CAPS on top yields a virtually identical
+          ($sm = 0.543$ vs $0.541$) outcome. Once the critic geometry is
+          stabilized, the actor naturally tracks the implied smooth
+          policy &mdash; no actor-side constraint is needed.
+        </p>
+
+
+        <!-- (f) During-training -->
+        <p style="margin-bottom:1.2em;"></p>
+        <h5 class="title is-5">(f) Is the critic getting <em>worse</em> during training without PAVE?</h5>
+
+        <p>
+          Theory predicts that as TD-learning fits a more complex Q-surface,
+          $\|\nabla^{2}_{sa} Q\|$ should grow over training unless something
+          actively suppresses it. We checkpoint the critic at intermediate
+          steps and recompute $M_{\sup}$ and the strict-concavity rate.
+        </p>
+
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-fullwidth has-text-centered" style="font-size:0.88em;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:middle;">Env / step</th>
+                <th colspan="2">$M_{\sup} \downarrow$</th>
+                <th colspan="2">Neg Def Rate $\uparrow$</th>
+              </tr>
+              <tr>
+                <th>Base</th><th>PAVE</th><th>Base</th><th>PAVE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>LunarLander &mdash; 100K</td><td>273</td><td><b>101</b></td><td>0.277</td><td><b>0.497</b></td></tr>
+              <tr><td>LunarLander &mdash; 300K</td><td>616</td><td><b>129</b></td><td>0.283</td><td><b>0.689</b></td></tr>
+              <tr><td>LunarLander &mdash; 500K</td><td>1105</td><td><b>188</b></td><td>0.332</td><td><b>0.808</b></td></tr>
+              <tr><td>Walker &mdash; 200K</td><td>636</td><td><b>167</b></td><td>0.071</td><td><b>0.548</b></td></tr>
+              <tr><td>Walker &mdash; 600K</td><td>1212</td><td><b>417</b></td><td>0.121</td><td><b>0.600</b></td></tr>
+              <tr><td>Walker &mdash; 1M</td><td>1320</td><td><b>659</b></td><td>0.144</td><td><b>0.638</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Base's $M_{\sup}$ grows by roughly <b>4&times;</b> over training
+          on Lunar (273 &rarr; 1105) and stays large on Walker.
+          PAVE keeps $M_{\sup}$ approximately constant
+          (Lunar 101 &rarr; 188, &lt;2&times;) and steadily improves the
+          strict-concavity rate. The "unconstrained critic gets more
+          volatile as it learns" is a real phenomenon, and PAVE
+          counteracts it from early training onwards.
+        </p>
+
+
+        <div class="takeaway" style="margin-top:1.4em;">
+          <b>Putting it together.</b> Across six independent angles
+          &mdash; spectral $M$, concavity rate, cosine flips,
+          critic-centric baselines, factorial ablation, actor-side
+          combination, and training trajectory &mdash; the empirical
+          picture is consistent with the bound $L \le M / \mu$ and with
+          the claim that policy non-smoothness is a property of the
+          critic's differential geometry. The same regularizer that
+          provably targets $M$ and $\mu$ in theory also moves them in
+          the right direction in practice, while baselines that target
+          neither (policy-side) or only one (SN/GP-Critic) fail in the
+          ways the theory predicts they should.
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Results -->
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3">What "PAVing" the Q-Gradient Field Looks Like</h2>
+
+        <p>
+          The figures below visualise the spectral norm of the mixed Hessian, $\|\nabla^{2}_{sa} Q\|_2$, as a 3-D
+          surface over a $50 \times 50$ sweep of (state dim, action dim). This is the empirical analogue of the
+          theoretical bound $L \le M/\mu$: each peak marks an $(s, a)$ where a small state perturbation can rotate
+          the action gradient sharply, directly upper-bounding how non-smooth any actor that climbs $\nabla_a Q$ can
+          become. The dominant axis is selected once per environment from the Base critic and then re-used for every
+          method, so the five panels in a row share the <em>same</em> axes. All panels share the same color scale
+          (Z-axis clipped at the Base 99-th percentile) so heights are directly comparable.
+        </p>
+
+        <p style="margin-bottom:1.5em;"></p>
+
+        <figure>
+          <img class="pave-figure" src="static/images/q_gradient_field_walker_td3.png"
+               alt="Walker Q-gradient field — TD3, five methods.">
+          <figcaption class="content has-text-centered pave-caption">
+            <b>Figure 1.</b> Walker2d Q-gradient field under TD3, SiLU-unified. Left to right: Base, CAPS, GRAD,
+            ASAP, PAVE. Baselines exhibit jagged landscapes with sharp spikes &mdash; this is the same
+            $\|\nabla^{2}_{sa} Q\|$ that controls policy non-smoothness. PAVE flattens these spikes into a stable,
+            paved manifold.
           </figcaption>
         </figure>
 
-        <figure style="text-align: center; margin-bottom: 1em;">
-          <img src="static/images/table2_gymnasium_sac.png" alt="fail" width="90%">
-          <figcaption class="content has-text-centered" style="word-break:normal">
-            <b>Table 2.</b> Cumulative return (re) and smoothness score (sm) on Gymnasium benchmark under SAC
-            setting. Higher re and lower sm are better. Bold indicates best, and underlined the second-best, per
-            environment. Standard deviations shown in parentheses.
+        <p style="margin-bottom:1.5em;"></p>
+
+        <figure>
+          <img class="pave-figure" src="static/images/q_gradient_field_td3.png"
+               alt="TD3 Q-gradient field grid across six environments.">
+          <figcaption class="content has-text-centered pave-caption">
+            <b>Figure 2.</b> Comprehensive Q-gradient field under <b>TD3</b> (SiLU-unified). Rows top &rarr; bottom:
+            LunarLander, Pendulum, Reacher, Ant, Hopper, Walker. Columns left &rarr; right: Base, CAPS, GRAD, ASAP,
+            PAVE. PAVE has the lowest, smoothest surface in 5/6 environments, matching the quantitative reduction in
+            $M_{\sup}$ reported in the paper.
           </figcaption>
         </figure>
 
-        <h5 class="title is-5">Evaluation on Isaac-Lab</h5>
-        <p style="margin-bottom:2em;"> </p>
-        <p>
-          Experiments on Isaac-Lab were conducted to assess whether ASAP remains effective beyond standard
-          benchmarks,
-          under <strong>realistic robot dynamics and practical noise conditions</strong>.
-          Isaac-Lab provides high-fidelity physics simulation along with domain randomization and observation
-          noise,
-          enabling evaluation of policy stability and control quality in more realistic settings.
-        </p>
+        <p style="margin-bottom:1.5em;"></p>
 
-        <p>
-          We apply ASAP to PPO-based policies and compare performance using two metrics:
-          <strong>cumulative return</strong> and action smoothness.
-          The results show that ASAP consistently reduces high-frequency action oscillations while maintaining or
-          improving
-          policy performance across multiple robotic tasks, demonstrating that transition-induced similar states
-          and
-          prediction-based alignment remain effective in robotic control scenarios.
-        </p>
-        <p style="margin-bottom:2em;"> </p>
-        <figure style="text-align: center; margin-bottom: 1em;">
-          <img src="static/images/table3_isaaclab.png" alt="fail" width="90%">
-          <figcaption class="content has-text-centered" style="word-break:normal">
-            <b>Table 3.</b> Cumulative return (re) and smoothness score (sm) for PPO Base and PPO + ASAP on the
-            Isaac-Lab environment.Higher re and lower sm are better. Bold indicates the best per environment.
-            Standard deviations shown in parentheses.
+        <figure>
+          <img class="pave-figure" src="static/images/q_gradient_field_sac.png"
+               alt="SAC Q-gradient field grid across six environments.">
+          <figcaption class="content has-text-centered pave-caption">
+            <b>Figure 3.</b> Comprehensive Q-gradient field under <b>SAC</b> (SiLU-unified). Same protocol and
+            ordering as Figure&nbsp;2. The CAPS / GRAD / ASAP columns remain visually similar to Vanilla &mdash;
+            policy-side regularizers smooth what the actor outputs but leave the critic's geometry essentially
+            unchanged. Only PAVE acts on the geometry itself.
           </figcaption>
         </figure>
 
@@ -613,57 +1081,37 @@ We validate our method on public driving datasets, where it consistently outperf
     </div>
   </section>
 
-  <!-- Conclusion carousel -->
+
+  <!-- Conclusion -->
   <section class="hero is-small">
     <div class="hero-body">
-      <div class="container">
+      <div class="container is-max-desktop">
         <h2 class="title is-3">Conclusion</h2>
-
-        <h5 class="title is-5">Conclusion</h5>
-        <p style="margin-bottom:2em;"></p>
         <p>
-          We propose ASAP, a novel action smoothing method that combines
-          transition induced similar states with prediction from preceding states.
-          ASAP effectively suppresses high-frequency action oscillations while preserving
-          policy performance, as demonstrated across Gymnasium and Isaac-Lab benchmarks.
-          The method introduces no additional inference-time overhead, making it
-          readily applicable to real-world robotic control systems.
+          We identify the critic's irregular geometry as the root of policy instability. Using the Implicit Function
+          Theorem, we prove that policy sensitivity is governed by the ratio of the Q-function's mixed-partial
+          volatility to its action-space curvature, $L \le M/\mu$. To validate this insight we propose PAVE, which
+          stabilizes this geometry via three lightweight, Hessian-free auxiliary critic losses. Empirical results
+          confirm that paving the Q-gradient field induces smooth policies <em>without actor-side constraints</em>,
+          substantiating the importance of a critic-centric perspective on continuous control.
         </p>
-        <p style="margin-bottom:2em;"></p>
-
-        <h5 class="title is-5">Limitation</h5>
-        <p style="margin-bottom:2em;"></p>
-        <p>
-          ASAP defines similar states under the assumption of bounded transition noise.
-          In environments with excessively high noise, the induced neighborhood may become
-          overly large, potentially weakening the spatial alignment effect.
-          This limitation can be mitigated by appropriately tuning the spatial regularization strength.
-        </p>
-        <p style="margin-bottom:2em;"></p>
-
       </div>
     </div>
   </section>
-  <!-- End conclusion carousel -->
 
-  <!--BibTex citation -->
-  <!-- <section class="section" id="BibTeX">
+
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
-      <h2 class="title">BibTeX</h2>
-      <pre><code>
-@InProceedings{Kwak_2026_AAAI,
-    author    = {Kwak, Kyoleen and Hwang, Hyoseok},
-    title     = {Enhancing Control Policy Smoothness by Aligning Actions with Predictions from Preceding States},
-    booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
-    month     = {January},
-    year      = {2026},
-    pages     = {}
+      <h2 class="title is-3">BibTeX</h2>
+      <pre><code>@article{lee2026stabilizing,
+  title={Stabilizing the Q-Gradient Field for Policy Smoothness in Actor-Critic},
+  author={Lee, Jeong Woon and Kwak, Kyoleen and Kim, Daeho and Hwang, Hyoseok},
+  journal={arXiv preprint arXiv:2601.22970},
+  year={2026}
 }</code></pre>
     </div>
-</section> -->
-  <!--End BibTex citation -->
-
-
+  </section>
 
 </body>
 

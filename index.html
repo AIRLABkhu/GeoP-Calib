@@ -5,28 +5,28 @@
   <meta charset="utf-8">
   <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
   <!-- Replace the content tag with appropriate information -->
-  <meta name="description" content="DESCRIPTION META TAG">
-  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG" />
-  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG" />
-  <meta property="og:url" content="URL OF THE WEBSITE" />
+  <meta name="description" content="GeoP-Calib preserves the metric geometry of the 3D Gaussian Splatting proxy for targetless LiDAR-Camera extrinsic calibration, via Dense Depth Anchoring and Gradient Decoupling. ECCV 2026.">
+  <meta property="og:title" content="GeoP-Calib: Geometry-Preserving 3D Gaussian Splatting for LiDAR-Camera Calibration" />
+  <meta property="og:description" content="GeoP-Calib preserves the metric geometry of the 3D Gaussian Splatting proxy for targetless LiDAR-Camera extrinsic calibration, via Dense Depth Anchoring and Gradient Decoupling. ECCV 2026." />
+  <meta property="og:url" content="https://AIRLABkhu.github.io/GeoP-Calib/" />
   <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
-  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image" content="static/images/teaser/full_gt_box.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
 
-  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
-  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <meta name="twitter:title" content="GeoP-Calib: Geometry-Preserving 3D Gaussian Splatting for LiDAR-Camera Calibration">
+  <meta name="twitter:description" content="GeoP-Calib preserves the metric geometry of the 3D Gaussian Splatting proxy for targetless LiDAR-Camera extrinsic calibration, via Dense Depth Anchoring and Gradient Decoupling. ECCV 2026.">
   <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
-  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:image" content="static/images/teaser/full_gt_box.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <!-- Keywords for your paper to be indexed by-->
-  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="keywords" content="LiDAR-Camera calibration, extrinsic calibration, 3D Gaussian Splatting, 3DGS, targetless calibration, KITTI, KITTI-360, ECCV 2026">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
   <title>Geometry-Preserving in 3D Gaussian Splatting for LiDAR-Camera Extrinsic Calibration</title>
-  <link rel="icon" type="image/x-icon" href="static/images/favicon/stablediffusison_photo_icon.ico">
+  <!-- TODO: add static/images/favicon/favicon.ico -->
   <!-- <link rel="icon" type="image/x-icon" href="static/images/favicon/DALLE3_illust_icon.ico"> -->
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
@@ -243,6 +243,8 @@
                 <br> {2007kkl, kdh2769, everyman123, hyoseok}@khu.ac.kr
                 <!-- <span class="author-block"> -->
                 <!-- <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Hyoseok Hwang</a>,</span> -->
+                 <br>
+                <span style="font-size: 0.85em;"><sup>*</sup> Corresponding author</span>
 
 
             </div>
@@ -341,6 +343,145 @@
   </style>
 
 
+  <!-- Teaser: Rendering Quality != Calibration Quality -->
+  <style>
+    .teaser-block { padding: 2rem 1.5rem 2.5rem; }
+    .teaser-full img {
+      width: 100%; display: block; border-radius: 6px;
+      border: 1px solid #dbdbdb;
+    }
+    .teaser-caption { font-size: 0.85rem; color: #7a7a7a; margin-top: 0.5rem; }
+    .crop-row {
+      display: flex; justify-content: center; gap: 1.5rem;
+      flex-wrap: wrap; margin-top: 1.75rem;
+    }
+    .crop-cell { text-align: center; }
+    .crop-cell img {
+      width: 168px; height: 168px; display: block;
+      image-rendering: auto; border-radius: 4px; border: 1px solid #dbdbdb;
+    }
+    .crop-cell .crop-label {
+      font-weight: 600; margin-top: 0.5rem; font-size: 0.95rem;
+    }
+    .crop-cell .crop-metric { font-size: 0.85rem; color: #7a7a7a; }
+    .crop-cell.is-ours img { border: 2px solid #3273dc; }
+    .crop-cell.is-ours .crop-label { color: #3273dc; }
+
+    .scoreboard {
+      margin: 2rem auto 0; border-collapse: collapse;
+      font-size: 0.95rem; width: auto;
+      border: 1px solid #dbdbdb;
+    }
+    .scoreboard th, .scoreboard td {
+      border: 1px solid #dbdbdb; padding: 0.55rem 1.1rem; text-align: center;
+    }
+    .scoreboard thead th { background: #fafafa; font-weight: 600; }
+    .scoreboard tbody th { text-align: left; font-weight: 600; }
+    .scoreboard .win-render { background: #fff3e0; font-weight: 700; }
+    .scoreboard .win-calib  { background: #e3f0ff; font-weight: 700; }
+    .scoreboard .grp-render { color: #b56a00; }
+    .scoreboard .grp-calib  { color: #1a5fb4; }
+
+    /* Bulma's .hero is a flex container, so .container inside it is a flex item whose
+       default min-width:auto refuses to shrink below its content's min-content width.
+       Without min-width:0 a nowrap table widens the whole page instead of scrolling. */
+    .teaser-block { min-width: 0; }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%; }
+
+    .teaser-claim {
+      margin-top: 1.75rem; text-align: center;
+      font-size: 1.15rem; line-height: 1.6;
+    }
+    .teaser-claim .lead { font-weight: 700; }
+    .teaser-note {
+      font-size: 0.8rem; color: #9a9a9a; text-align: center; margin-top: 0.9rem;
+    }
+    @media screen and (max-width: 768px) {
+      .crop-cell img { width: 132px; height: 132px; }
+      .scoreboard { font-size: 0.8rem; }
+      .scoreboard th, .scoreboard td { padding: 0.4rem 0.6rem; }
+    }
+  </style>
+
+  <section class="hero is-small">
+    <div class="container is-max-desktop teaser-block">
+      <h2 class="title is-3 has-text-centered">Rendering Quality &ne; Calibration Quality</h2>
+
+      <div class="teaser-full">
+        <img src="static/images/teaser/full_gt_box.jpg"
+             alt="KITTI-360 Seq. 2 ground-truth view with the analyzed crop region marked">
+        <p class="teaser-caption has-text-centered">
+          Ground-truth camera view, KITTI-360 Seq.&nbsp;2. The red box marks the region magnified below.
+        </p>
+      </div>
+
+      <div class="crop-row">
+        <div class="crop-cell">
+          <img src="static/images/teaser/crop_gt.png" alt="Ground-truth crop">
+          <div class="crop-label">GT</div>
+          <div class="crop-metric">&nbsp;</div>
+        </div>
+        <div class="crop-cell">
+          <img src="static/images/teaser/crop_rgb_base.png" alt="Base rendering, crop">
+          <div class="crop-label">Base</div>
+          <div class="crop-metric">PSNR 15.81</div>
+        </div>
+        <div class="crop-cell is-ours">
+          <img src="static/images/teaser/crop_rgb_ours.png" alt="GeoP-Calib rendering, crop">
+          <div class="crop-label">GeoP-Calib (Ours)</div>
+          <div class="crop-metric">PSNR 12.65</div>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+      <table class="scoreboard">
+        <thead>
+          <tr>
+            <th rowspan="2"></th>
+            <th colspan="2" class="grp-render">Rendering</th>
+            <th colspan="2" class="grp-calib">Calibration</th>
+          </tr>
+          <tr>
+            <th class="grp-render">PSNR &uarr;</th>
+            <th class="grp-render">SSIM &uarr;</th>
+            <th class="grp-calib">E<sub>r</sub> (&deg;) &darr;</th>
+            <th class="grp-calib">E<sub>t</sub> (m) &darr;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Base</th>
+            <td class="win-render">15.81</td>
+            <td class="win-render">0.702</td>
+            <td>0.156</td>
+            <td>0.084</td>
+          </tr>
+          <tr>
+            <th>GeoP-Calib (Ours)</th>
+            <td>12.65</td>
+            <td>0.663</td>
+            <td class="win-calib">0.145</td>
+            <td class="win-calib">0.059</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <p class="teaser-claim">
+        The Base pipeline renders <b>3.2&nbsp;dB better</b>.<br>
+        <span class="lead">GeoP-Calib still localizes the camera 30% more accurately.</span><br>
+        Rendering fidelity is not the objective &mdash; metric geometry is.
+      </p>
+
+      <p class="teaser-note">
+        PSNR / SSIM computed over the full image of the frame shown above.
+        E<sub>r</sub> / E<sub>t</sub> are means over five random seeds on KITTI-360 Seq.&nbsp;2.
+        &ldquo;Base&rdquo; is our pipeline with Gradient Decoupling and Dense Depth Anchoring disabled.
+      </p>
+    </div>
+  </section>
+  <!-- End teaser -->
+
   <!-- Paper abstract -->
   <section class="section hero is-light">
     <div class="container is-max-desktop">
@@ -364,25 +505,683 @@ We validate our method on public driving datasets, where it consistently outperf
   </section>
   <!-- End paper abstract -->
 
+  <!-- Shared styles for the body sections -->
+  <style>
+    /* .hero is a column flex container, so this .container's width is otherwise pulled
+       out by the min-content width of its widest child (a nowrap table, a MathJax display
+       equation). max-width pins the box to the viewport; the children scroll inside it. */
+    .sec { padding: 3rem 1.5rem; min-width: 0; }
+    .sec .title.is-3 { margin-bottom: 0.4rem; }
+    .sec-lead {
+      text-align: center; color: #5a5a5a; font-size: 1.05rem;
+      max-width: 46rem; margin: 0 auto 2.25rem;
+    }
+    .fig { margin: 0 0 2rem; }
+    .fig img, .fig video {
+      width: 100%; display: block; border-radius: 6px; border: 1px solid #dbdbdb;
+    }
+    .fig video { background: #f5f5f5; }
+    /* standalone plots carry their own axis/legend type, which reads oversized at the full
+       container width -- cap them so the in-figure text sits near the body text size */
+    .fig.is-narrow img { max-width: 620px; margin-left: auto; margin-right: auto; }
+    .fig figcaption { font-size: 0.85rem; color: #7a7a7a; margin-top: 0.6rem; text-align: center; }
+    .fig figcaption b { color: #4a4a4a; }
+    .fig-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    /* Cards and diagrams share one grid so each loss sits in a single column. The two
+       diagrams have very different aspect ratios (2.12 vs 1.26), so the columns are
+       weighted by those ratios -- that makes both diagrams the same height at any width. */
+    .prelim-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      column-gap: 1.5rem; row-gap: 1.5rem; margin-bottom: 2rem;
+    }
+    /* Equal columns keep the diagrams aligned with the cards above them. The right
+       diagram is drawn at a larger internal scale than the left, so it is scaled down
+       here until the photo panels inside both read at the same size. */
+    .prelim-grid > div:nth-child(n+3) {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .prelim-grid img { border: none; border-radius: 0; }
+    .prelim-grid > div:last-child img { width: 74%; }
+    .fig-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .fig-errmap {
+      display: grid; grid-template-columns: 1fr 1fr 34px; gap: 1rem; align-items: end;
+    }
+    .fig-pair > *, .fig-trio > *, .fig-errmap > *, .prelim-grid > * { min-width: 0; }
+    .fig-errmap .errbar img { border: none; border-radius: 0; }
+    .panel-label {
+      font-weight: 600; font-size: 0.95rem; margin-bottom: 0.4rem; text-align: center;
+    }
+    .panel-label.is-ours { color: #3273dc; }
+
+    /* placeholder for figures that still need to be exported */
+    .todo-fig {
+      border: 2px dashed #c8c8c8; border-radius: 6px; background: #fbfbfb;
+      padding: 2.5rem 1.5rem; text-align: center; color: #9a9a9a;
+    }
+    .todo-fig .todo-title { font-weight: 600; color: #7a7a7a; margin-bottom: 0.35rem; }
+    .todo-fig code { background: #f0f0f0; color: #7a5c00; font-size: 0.8rem; }
+
+    .prelim-grid .card-lite {
+      border: 1px solid #e4e4e4; border-radius: 8px; padding: 1.25rem 1.4rem; background: #fff;
+    }
+    .prelim-grid .card-lite h4 { font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem; }
+    .prelim-grid .card-lite p { font-size: 0.95rem; color: #5a5a5a; }
+
+    /* display equations need breathing room from the figure that follows, and must
+       scroll inside their own box rather than widening the whole page on narrow screens */
+    .sec p.has-text-centered { margin: 1.4rem 0 2rem; overflow-x: auto; overflow-y: hidden; }
+
+    .bridge {
+      border-left: 4px solid #3273dc; background: #f4f8ff;
+      padding: 1rem 1.25rem; margin-top: 1.5rem; font-size: 1.02rem;
+    }
+
+    /* result tables */
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%; }
+    table.restable {
+      border-collapse: collapse; margin: 0 auto; font-size: 0.82rem;
+      background: #fff; border: none; white-space: nowrap;
+    }
+    table.restable th, table.restable td {
+      border: none; border-bottom: 1px solid #ededed;
+      padding: 0.3rem 0.55rem; text-align: center;
+    }
+    table.restable thead th {
+      border-bottom: 1px solid #b5b5b5; font-weight: 600; color: #363636;
+    }
+    table.restable thead tr:first-child th { border-top: 2px solid #363636; }
+    table.restable tbody th { text-align: left; font-weight: 600; }
+    table.restable .ds-head td {
+      text-align: left; font-weight: 700; letter-spacing: 0.04em;
+      background: #fafafa; color: #363636; padding-top: 0.5rem; padding-bottom: 0.5rem;
+    }
+    table.restable .avg-row td, table.restable .avg-row th { border-top: 1px solid #b5b5b5; }
+    table.restable .ours-col, table.restable .avg-col { background: #f4f8ff; }
+    table.restable .ours-row td { background: #f4f8ff; }
+    table.restable .v { display: block; }
+    table.restable .s { display: block; font-size: 0.72rem; color: #a5a5a5; }
+    table.restable td.best .v { font-weight: 800; }
+    table.restable td.second .v { text-decoration: underline; }
+    table.restable td.chk { font-weight: 700; color: #3273dc; }
+    .table-note { font-size: 0.8rem; color: #9a9a9a; margin-top: 0.9rem; text-align: center; }
+
+    @media screen and (max-width: 768px) {
+      .fig-pair, .fig-trio, .prelim-grid { grid-template-columns: 1fr; }
+      .fig-errmap { grid-template-columns: 1fr 28px; }
+      .prelim-grid > div:last-child img { width: 100%; }
+      table.restable { font-size: 0.72rem; }
+    }
+  </style>
+
+
+  <style>
+    /* Below Bulma's desktop breakpoint the .container has no max-width of its own, and
+       because .hero is a column flex container its width gets pulled out by the widest
+       min-content in the section (nowrap tables, MathJax display equations). Capping it
+       here keeps the page from scrolling sideways; the children scroll inside instead.
+       Scoped to <1024px so Bulma's 960px desktop cap is left untouched. */
+    @media screen and (max-width: 1023px) {
+      .sec, .teaser-block, #BibTeX .container { max-width: 100%; }
+    }
+  </style>
+
+  <!-- ===================== 1. Preliminaries ===================== -->
+  <section class="hero is-small">
+    <div class="container is-max-desktop sec">
+      <h2 class="title is-3 has-text-centered">How 3DGS Calibrates a LiDAR&ndash;Camera Pair</h2>
+      <p class="sec-lead">
+        Gaussians are initialized on LiDAR points and rendered into the camera view, so the
+        extrinsic <span class="math">$\mathbf{T}_{cl}$</span> can be optimized by minimizing
+        image-domain losses. Two losses do the work.
+      </p>
+
+      <div class="prelim-grid">
+        <div class="card-lite">
+          <h4>Photometric Alignment &nbsp;<span class="math">$\mathcal{L}_{pho}$</span></h4>
+          <p>
+            Aligns the extrinsics by matching the rendered image to the observed one.
+            The signal reaches <span class="math">$\mathbf{T}_{cl}$</span>
+            <b>through the learned Gaussian color</b>.
+          </p>
+        </div>
+        <div class="card-lite">
+          <h4>Cross-view Consistency &nbsp;<span class="math">$\mathcal{L}_{rep}$</span></h4>
+          <p>
+            Warps pixels into an adjacent frame with the rendered depth and compares
+            ground-truth intensities. The signal is mediated <b>by depth, not color</b>.
+          </p>
+        </div>
+        <div><img src="static/images/prelim/Photometric_Alignment_Loss.png"
+                  alt="Photometric alignment: rendered image compared against the observed image"></div>
+        <div><img src="static/images/prelim/Reprojection_Loss.png"
+                  alt="Reprojection: pixels warped into an adjacent frame using the rendered depth"></div>
+      </div>
+
+      <p class="bridge">
+        Both losses reach the extrinsics <b>through the renderer</b>. The Jacobian
+        <span class="math">$\partial\Phi(\mathcal{G},\mathbf{T}_{cw})/\partial\mathbf{T}_{cl}$</span>
+        depends on the current proxy state <span class="math">$\mathcal{G}$</span> &mdash; so every
+        extrinsic update is only as trustworthy as the geometric fidelity of the Gaussian proxy.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ===================== 2. Geometric Decay ===================== -->
+  <section class="hero is-small is-light">
+    <div class="container is-max-desktop sec">
+      <h2 class="title is-3 has-text-centered">Geometric Decay</h2>
+      <p class="sec-lead">
+        A single LiDAR scan supervises only a small fraction of the image. Everywhere else the
+        optimizer is free to move Gaussians to reduce photometric residuals &mdash; and it does,
+        drifting the proxy away from the true LiDAR structure.
+      </p>
+
+      <div class="fig">
+        <div class="fig-pair">
+          <div>
+            <div class="panel-label">w/ photometric alignment</div>
+            <img src="static/images/decay/depth_with_photo.jpg"
+                 alt="Rendered depth when the photometric alignment loss is active">
+          </div>
+          <div>
+            <div class="panel-label">depth supervision only</div>
+            <img src="static/images/decay/depth_depthonly.jpg"
+                 alt="Rendered depth when only the depth loss is used">
+          </div>
+        </div>
+        <figcaption>
+          Rendered depth on KITTI-360 Seq.&nbsp;1, with the projected LiDAR points overlaid in
+          red. The two runs share the same pipeline &mdash; <b>only the photometric alignment loss
+          differs</b>. With it active (left), depth spreads far above the LiDAR line into regions
+          where no measurement exists. With depth supervision alone (right), the geometry stays
+          where the LiDAR actually saw something. The photometric loss is what pulls Gaussians into
+          the void &mdash; and that void is exactly where a rendering-oriented pipeline earns its
+          PSNR. Gradient Decoupling restores the right-hand behavior, which is why our rendering in
+          the teaser shows green there.
+        </figcaption>
+      </div>
+
+      <div class="fig is-narrow">
+        <img src="static/images/decay/depth_loss_curve.png"
+             alt="Depth loss over training, with and without photometric alignment">
+        <figcaption>
+          The depth loss rises whenever photometric alignment is active and settles when it is
+          not &mdash; while the later activation of the reprojection loss causes no comparable
+          degradation. This asymmetry is what motivates blocking only
+          <span class="math">$\mathcal{L}_{pho}$</span>.
+        </figcaption>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================== 3. Method ===================== -->
+  <section class="hero is-small">
+    <div class="container is-max-desktop sec">
+      <h2 class="title is-3 has-text-centered">GeoP-Calib</h2>
+      <p class="sec-lead">
+        Two components that keep the Gaussian proxy metrically faithful while the extrinsics are
+        still being refined. They cooperate but stay gradient-decoupled: DDA governs where the
+        geometry may sit, GD decides what is allowed to move it.
+      </p>
+
+      <div class="fig">
+        <img src="static/images/method/pipeline.png"
+             alt="Overview of the GeoP-Calib pipeline">
+        <figcaption>Overview of the geometry-preserving calibration pipeline.</figcaption>
+      </div>
+
+      <h3 class="title is-4">Dense Depth Anchoring (DDA)</h3>
+      <p class="content">
+        A single scan leaves most of the image unconstrained, so we accumulate every LiDAR
+        observation into a global cloud
+        <span class="math">$\mathcal{P}_{global}=\bigcup_t (\mathbf{T}^t_{lw})^{-1}\mathcal{P}^t$</span>
+        and project it back into the current view. The resulting dense anchor
+        <span class="math">$D^{dense}_l$</span> covers far more of the image than one scan and
+        pins the Gaussian spatial parameters <span class="math">$(\mu,\Sigma)$</span> even where the
+        current frame has no returns.
+      </p>
+
+      <h4 class="title is-5">Volumetric Soft Mask (VSM)</h4>
+      <p class="content">
+        Accumulation introduces occlusion ambiguity &mdash; points seen from a distant viewpoint
+        land on foreground objects. We use the rendered depth itself as a continuous visibility
+        prior, down-weighting anything that sits far behind the Gaussian surface:
+      </p>
+      <p class="has-text-centered">
+        <span class="math">
+          $W_{vis}(\mathbf{p}) = \sigma\!\left(\beta \cdot \big(D_{rend}(\mathbf{p})(1+\tau) - D^{dense}_l(\mathbf{p})\big)\right)$
+        </span>
+      </p>
+
+      <div class="fig">
+        <div class="fig-pair">
+          <div><img src="static/images/method/vsm_off_fig.jpg"
+                    alt="Point projection without the volumetric soft mask"></div>
+          <div><img src="static/images/method/vsm_on_fig.jpg"
+                    alt="Point projection with the volumetric soft mask"></div>
+        </div>
+        <figcaption>
+          Color encodes depth (red = near, blue = far). Without VSM, background points travel
+          along the light ray and land <b>on top of</b> the foreground object; with VSM those
+          occluded projections are down-weighted and the foreground reads as a single surface.
+        </figcaption>
+      </div>
+
+      <h3 class="title is-4">Gradient Decoupling (GD)</h3>
+      <p class="content">
+        We apply a stop-gradient to the spatial parameters inside the color rendering path, so
+        texture-driven residuals can no longer deform the geometry:
+      </p>
+      <p class="has-text-centered">
+        <span class="math">
+          $\mathcal{L}^{decoupled}_{pho} = \mathcal{D}_{photo}\Big(I^t,\, \Phi_{color}(\text{sg}[\mu,\Sigma],\alpha,c,\mathbf{T}_{cl}\mathbf{T}^t_{lw})\Big)$
+        </span>
+      </p>
+      <p class="content">
+        Crucially, GD is applied <b>only</b> to <span class="math">$\mathcal{L}_{pho}$</span>.
+        The reprojection loss keeps its gradients to
+        <span class="math">$(\mu,\Sigma)$</span>: it compares ground-truth intensities through
+        depth-induced correspondences without ever touching the learned Gaussian color, so it
+        encourages view-consistent structure rather than per-view texture fitting.
+      </p>
+      <p class="has-text-centered">
+        <span class="math">
+          $\mathcal{L}^{GeoP}_{total} = \mathcal{L}^{decoupled}_{pho} + \lambda_{rep}\mathcal{L}_{rep} + \lambda^{sparse}_{depth}\mathcal{L}^{sparse}_{depth} + \lambda^{dense}_{depth}\mathcal{L}^{dense}_{depth}$
+        </span>
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ===================== 4. Results ===================== -->
+  <section class="hero is-small is-light">
+    <div class="container is-max-desktop sec">
+      <h2 class="title is-3 has-text-centered">Results</h2>
+      <p class="sec-lead">
+        Five random seeds per entry, reported as mean (standard deviation).
+        <b>Bold</b> is best, <u>underlined</u> is second best.
+      </p>
+
+      <h3 class="title is-4 has-text-centered">Calibration Accuracy</h3>
+      <div class="table-scroll">
+        <table class="restable">
+<thead>
+<tr><th rowspan="2">Seq.</th>
+<th colspan="2">GST [16]</th>
+<th colspan="2">Claim [35]</th>
+<th colspan="2">RobustCalib [37]</th>
+<th colspan="2">HiGS-Calib [33]</th>
+<th colspan="2" class="ours-col">GeoP-Calib (Ours)</th>
+</tr><tr>
+<th>E<sub>r</sub>(&deg;)</th><th>E<sub>t</sub>(m)</th>
+<th>E<sub>r</sub>(&deg;)</th><th>E<sub>t</sub>(m)</th>
+<th>E<sub>r</sub>(&deg;)</th><th>E<sub>t</sub>(m)</th>
+<th>E<sub>r</sub>(&deg;)</th><th>E<sub>t</sub>(m)</th>
+<th class="ours-col">E<sub>r</sub>(&deg;)</th><th class="ours-col">E<sub>t</sub>(m)</th>
+</tr></thead>
+<tbody><tr class="ds-head"><td colspan="11">KITTI-360</td></tr>
+<tr><th>Seq. 1</th>
+<td><span class="v">0.351</span><span class="s">(0.080)</span></td>
+<td><span class="v">0.326</span><span class="s">(0.018)</span></td>
+<td><span class="v">0.663</span><span class="s">(0.409)</span></td>
+<td><span class="v">0.142</span><span class="s">(0.148)</span></td>
+<td><span class="v">0.202</span><span class="s">(0.021)</span></td>
+<td><span class="v">0.059</span><span class="s">(0.006)</span></td>
+<td class="best"><span class="v">0.111</span><span class="s">(0.016)</span></td>
+<td class="second"><span class="v">0.036</span><span class="s">(0.006)</span></td>
+<td class="second ours-col"><span class="v">0.124</span><span class="s">(0.046)</span></td>
+<td class="best ours-col"><span class="v">0.031</span><span class="s">(0.006)</span></td>
+</tr>
+<tr><th>Seq. 2</th>
+<td><span class="v">4.631</span><span class="s">(2.543)</span></td>
+<td><span class="v">0.394</span><span class="s">(0.254)</span></td>
+<td><span class="v">0.614</span><span class="s">(0.219)</span></td>
+<td class="best"><span class="v">0.056</span><span class="s">(0.030)</span></td>
+<td><span class="v">0.272</span><span class="s">(0.046)</span></td>
+<td><span class="v">0.107</span><span class="s">(0.019)</span></td>
+<td class="second"><span class="v">0.177</span><span class="s">(0.031)</span></td>
+<td><span class="v">0.087</span><span class="s">(0.004)</span></td>
+<td class="best ours-col"><span class="v">0.145</span><span class="s">(0.020)</span></td>
+<td class="second ours-col"><span class="v">0.059</span><span class="s">(0.007)</span></td>
+</tr>
+<tr><th>Seq. 3</th>
+<td><span class="v">0.991</span><span class="s">(0.199)</span></td>
+<td><span class="v">0.335</span><span class="s">(0.212)</span></td>
+<td><span class="v">0.232</span><span class="s">(0.073)</span></td>
+<td class="second"><span class="v">0.073</span><span class="s">(0.041)</span></td>
+<td><span class="v">0.307</span><span class="s">(0.047)</span></td>
+<td><span class="v">0.076</span><span class="s">(0.002)</span></td>
+<td class="second"><span class="v">0.103</span><span class="s">(0.096)</span></td>
+<td><span class="v">0.177</span><span class="s">(0.106)</span></td>
+<td class="best ours-col"><span class="v">0.074</span><span class="s">(0.030)</span></td>
+<td class="best ours-col"><span class="v">0.059</span><span class="s">(0.002)</span></td>
+</tr>
+<tr><th>Seq. 4</th>
+<td><span class="v">1.011</span><span class="s">(0.176)</span></td>
+<td><span class="v">0.316</span><span class="s">(0.210)</span></td>
+<td><span class="v">0.809</span><span class="s">(0.641)</span></td>
+<td><span class="v">0.296</span><span class="s">(0.253)</span></td>
+<td><span class="v">0.246</span><span class="s">(0.068)</span></td>
+<td><span class="v">0.133</span><span class="s">(0.005)</span></td>
+<td class="second"><span class="v">0.167</span><span class="s">(0.161)</span></td>
+<td class="second"><span class="v">0.118</span><span class="s">(0.111)</span></td>
+<td class="best ours-col"><span class="v">0.110</span><span class="s">(0.042)</span></td>
+<td class="best ours-col"><span class="v">0.071</span><span class="s">(0.001)</span></td>
+</tr>
+<tr><th>Seq. 5</th>
+<td><span class="v">0.751</span><span class="s">(0.423)</span></td>
+<td><span class="v">0.206</span><span class="s">(0.071)</span></td>
+<td><span class="v">0.284</span><span class="s">(0.110)</span></td>
+<td class="best"><span class="v">0.079</span><span class="s">(0.039)</span></td>
+<td><span class="v">0.248</span><span class="s">(0.003)</span></td>
+<td><span class="v">0.109</span><span class="s">(0.012)</span></td>
+<td class="best"><span class="v">0.141</span><span class="s">(0.010)</span></td>
+<td><span class="v">0.098</span><span class="s">(0.001)</span></td>
+<td class="second ours-col"><span class="v">0.153</span><span class="s">(0.030)</span></td>
+<td class="second ours-col"><span class="v">0.093</span><span class="s">(0.003)</span></td>
+</tr>
+<tr class="avg-row"><th>Avg.</th>
+<td><span class="v">1.547</span><span class="s">(1.570)</span></td>
+<td><span class="v">0.315</span><span class="s">(0.099)</span></td>
+<td><span class="v">0.520</span><span class="s">(0.303)</span></td>
+<td><span class="v">0.129</span><span class="s">(0.126)</span></td>
+<td><span class="v">0.255</span><span class="s">(0.055)</span></td>
+<td class="second"><span class="v">0.097</span><span class="s">(0.028)</span></td>
+<td class="second"><span class="v">0.140</span><span class="s">(0.059)</span></td>
+<td><span class="v">0.103</span><span class="s">(0.055)</span></td>
+<td class="best ours-col"><span class="v">0.121</span><span class="s">(0.041)</span></td>
+<td class="best ours-col"><span class="v">0.063</span><span class="s">(0.021)</span></td>
+</tr>
+</tbody>
+<tbody><tr class="ds-head"><td colspan="11">KITTI</td></tr>
+<tr><th>Seq. 1</th>
+<td><span class="v">2.626</span><span class="s">(1.151)</span></td>
+<td><span class="v">0.251</span><span class="s">(0.082)</span></td>
+<td><span class="v">0.247</span><span class="s">(0.125)</span></td>
+<td><span class="v">0.044</span><span class="s">(0.016)</span></td>
+<td><span class="v">0.305</span><span class="s">(0.051)</span></td>
+<td><span class="v">0.050</span><span class="s">(0.006)</span></td>
+<td class="second"><span class="v">0.112</span><span class="s">(0.008)</span></td>
+<td class="second"><span class="v">0.042</span><span class="s">(0.002)</span></td>
+<td class="best ours-col"><span class="v">0.105</span><span class="s">(0.009)</span></td>
+<td class="best ours-col"><span class="v">0.034</span><span class="s">(0.001)</span></td>
+</tr>
+<tr><th>Seq. 2</th>
+<td><span class="v">1.310</span><span class="s">(0.294)</span></td>
+<td><span class="v">0.232</span><span class="s">(0.058)</span></td>
+<td><span class="v">0.371</span><span class="s">(0.107)</span></td>
+<td><span class="v">0.092</span><span class="s">(0.030)</span></td>
+<td><span class="v">0.482</span><span class="s">(0.417)</span></td>
+<td><span class="v">0.074</span><span class="s">(0.014)</span></td>
+<td class="second"><span class="v">0.201</span><span class="s">(0.003)</span></td>
+<td class="second"><span class="v">0.056</span><span class="s">(0.001)</span></td>
+<td class="best ours-col"><span class="v">0.160</span><span class="s">(0.010)</span></td>
+<td class="best ours-col"><span class="v">0.054</span><span class="s">(0.001)</span></td>
+</tr>
+<tr><th>Seq. 3</th>
+<td><span class="v">1.106</span><span class="s">(0.678)</span></td>
+<td><span class="v">0.167</span><span class="s">(0.050)</span></td>
+<td class="best"><span class="v">0.219</span><span class="s">(0.066)</span></td>
+<td class="second"><span class="v">0.052</span><span class="s">(0.017)</span></td>
+<td><span class="v">0.300</span><span class="s">(0.018)</span></td>
+<td><span class="v">0.083</span><span class="s">(0.008)</span></td>
+<td><span class="v">0.239</span><span class="s">(0.016)</span></td>
+<td class="second"><span class="v">0.052</span><span class="s">(0.005)</span></td>
+<td class="second ours-col"><span class="v">0.224</span><span class="s">(0.018)</span></td>
+<td class="best ours-col"><span class="v">0.023</span><span class="s">(0.001)</span></td>
+</tr>
+<tr><th>Seq. 4</th>
+<td><span class="v">0.512</span><span class="s">(0.186)</span></td>
+<td><span class="v">0.413</span><span class="s">(0.159)</span></td>
+<td><span class="v">0.354</span><span class="s">(0.078)</span></td>
+<td><span class="v">0.067</span><span class="s">(0.018)</span></td>
+<td><span class="v">0.298</span><span class="s">(0.102)</span></td>
+<td><span class="v">0.084</span><span class="s">(0.009)</span></td>
+<td class="second"><span class="v">0.269</span><span class="s">(0.011)</span></td>
+<td class="second"><span class="v">0.062</span><span class="s">(0.001)</span></td>
+<td class="best ours-col"><span class="v">0.250</span><span class="s">(0.024)</span></td>
+<td class="best ours-col"><span class="v">0.052</span><span class="s">(0.001)</span></td>
+</tr>
+<tr><th>Seq. 5</th>
+<td><span class="v">2.801</span><span class="s">(1.475)</span></td>
+<td><span class="v">0.327</span><span class="s">(0.178)</span></td>
+<td><span class="v">0.411</span><span class="s">(0.056)</span></td>
+<td class="best"><span class="v">0.051</span><span class="s">(0.013)</span></td>
+<td><span class="v">0.375</span><span class="s">(0.150)</span></td>
+<td><span class="v">0.119</span><span class="s">(0.012)</span></td>
+<td class="second"><span class="v">0.209</span><span class="s">(0.007)</span></td>
+<td><span class="v">0.065</span><span class="s">(0.003)</span></td>
+<td class="best ours-col"><span class="v">0.201</span><span class="s">(0.016)</span></td>
+<td class="second ours-col"><span class="v">0.056</span><span class="s">(0.002)</span></td>
+</tr>
+<tr class="avg-row"><th>Avg.</th>
+<td><span class="v">1.671</span><span class="s">(0.892)</span></td>
+<td><span class="v">0.278</span><span class="s">(0.085)</span></td>
+<td><span class="v">0.352</span><span class="s">(0.074)</span></td>
+<td><span class="v">0.082</span><span class="s">(0.022)</span></td>
+<td><span class="v">0.352</span><span class="s">(0.071)</span></td>
+<td><span class="v">0.082</span><span class="s">(0.022)</span></td>
+<td class="second"><span class="v">0.206</span><span class="s">(0.053)</span></td>
+<td class="second"><span class="v">0.055</span><span class="s">(0.008)</span></td>
+<td class="best ours-col"><span class="v">0.188</span><span class="s">(0.051)</span></td>
+<td class="best ours-col"><span class="v">0.044</span><span class="s">(0.013)</span></td>
+</tr>
+</tbody>
+</table>
+      </div>
+      <p class="table-note">
+        GeoP-Calib attains the lowest rotation error on 7 of 10 sequences and the lowest
+        translation error on 7 of 10, and improves translation over HiGS-Calib on
+        <b>every</b> sequence.
+      </p>
+
+      <h3 class="title is-4 has-text-centered" style="margin-top:3rem;">Component Analysis</h3>
+      <div class="table-scroll">
+        <table class="restable">
+<thead><tr>
+<th>GD</th><th>DDA</th><th>VSM</th>
+<th>E<sub>r</sub>(&deg;)</th><th>E<sub>t</sub>(m)</th><th>T(s)</th>
+</tr></thead><tbody>
+<tr>
+<td class="chk"></td>
+<td class="chk"></td>
+<td class="chk"></td>
+<td><span class="v">0.122</span><span class="s">(0.031)</span></td>
+<td><span class="v">0.077</span><span class="s">(0.022)</span></td>
+<td><span class="v">875</span><span class="s">(16)</span></td>
+</tr>
+<tr>
+<td class="chk"></td>
+<td class="chk">&#10003;</td>
+<td class="chk">&#10003;</td>
+<td class="best"><span class="v">0.117</span><span class="s">(0.044)</span></td>
+<td><span class="v">0.068</span><span class="s">(0.021)</span></td>
+<td><span class="v">923</span><span class="s">(16)</span></td>
+</tr>
+<tr>
+<td class="chk">&#10003;</td>
+<td class="chk"></td>
+<td class="chk"></td>
+<td><span class="v">0.127</span><span class="s">(0.042)</span></td>
+<td><span class="v">0.067</span><span class="s">(0.022)</span></td>
+<td><span class="v">866</span><span class="s">(21)</span></td>
+</tr>
+<tr>
+<td class="chk">&#10003;</td>
+<td class="chk">&#10003;</td>
+<td class="chk"></td>
+<td><span class="v">0.124</span><span class="s">(0.045)</span></td>
+<td class="second"><span class="v">0.066</span><span class="s">(0.024)</span></td>
+<td><span class="v">&ndash;</span><span class="s">&nbsp;</span></td>
+</tr>
+<tr class="ours-row">
+<td class="chk">&#10003;</td>
+<td class="chk">&#10003;</td>
+<td class="chk">&#10003;</td>
+<td class="second"><span class="v">0.121</span><span class="s">(0.041)</span></td>
+<td class="best"><span class="v">0.063</span><span class="s">(0.021)</span></td>
+<td><span class="v">922</span><span class="s">(21)</span></td>
+</tr>
+</tbody></table>
+      </div>
+      <p class="table-note">
+        KITTI-360, averaged over the five sequences. VSM is a sub-component of DDA and is not
+        defined without it; the GD&nbsp;+&nbsp;DDA row was not timed. Runtime is the mean per
+        sequence on an RTX&nbsp;4070&nbsp;Ti with a Ryzen&nbsp;3600. Translation improves with
+        every component added, while rotation stays comparable to Base &mdash; GD suppresses
+        the far-range texture cues that would otherwise refine rotation.
+      </p>
+
+      <div class="fig" style="margin-top:3rem;">
+        <div class="fig-pair">
+          <div>
+            <div class="panel-label">Rotation</div>
+            <img src="static/images/results/noise_rotation.svg"
+                 alt="Rotation error across nine initialization noise levels">
+          </div>
+          <div>
+            <div class="panel-label">Translation</div>
+            <img src="static/images/results/noise_translation.svg"
+                 alt="Translation error across nine initialization noise levels">
+          </div>
+        </div>
+        <figcaption>
+          KITTI-360 Seq.&nbsp;2, initial extrinsics perturbed from 1&deg;/0.1&nbsp;m to
+          9&deg;/0.9&nbsp;m. GeoP-Calib converges under every level tested.
+        </figcaption>
+      </div>
+
+      <h3 class="title is-4 has-text-centered" style="margin-top:3rem;">
+        Rendering Quality Does Not Imply Calibration Quality
+      </h3>
+      <div class="fig">
+        <div class="fig-trio">
+          <div>
+            <div class="panel-label">GT</div>
+            <img src="static/images/results/rgb_gt.jpg" alt="Ground-truth image">
+          </div>
+          <div>
+            <div class="panel-label">Base &mdash; PSNR 15.81</div>
+            <img src="static/images/results/rgb_base.jpg" alt="Base rendering">
+          </div>
+          <div>
+            <div class="panel-label is-ours">Ours &mdash; PSNR 12.65</div>
+            <img src="static/images/results/rgb_ours.jpg" alt="GeoP-Calib rendering">
+          </div>
+        </div>
+        <figcaption>
+          The green regions carry no LiDAR support, so GeoP-Calib places no Gaussians there.
+          It renders worse and calibrates better. Photometric fidelity is <b>not</b> a sufficient
+          condition for accurate calibration &mdash; the Gaussian proxy is discarded after
+          calibration anyway; only the estimated extrinsics are kept.
+        </figcaption>
+      </div>
+
+      <h3 class="title is-4 has-text-centered" style="margin-top:3rem;">Geometric Accuracy</h3>
+      <div class="fig">
+        <div class="fig-errmap">
+          <div>
+            <div class="panel-label">(a) Base</div>
+            <img src="static/images/results/deptherr_base_fig.jpg" alt="Depth error maps, Base">
+          </div>
+          <div>
+            <div class="panel-label is-ours">(b) GeoP-Calib (Ours)</div>
+            <img src="static/images/results/deptherr_ours_fig.jpg" alt="Depth error maps, GeoP-Calib">
+          </div>
+          <div class="errbar">
+            <img src="static/images/results/deptherr_bar.png" alt="Error magnitude color bar">
+          </div>
+        </div>
+        <figcaption>
+          Absolute error between rendered depth and LiDAR depth on KITTI-360, in the
+          LiDAR-translation and camera-rotation setting (blue = low, red = high). Base shows
+          localized blow-ups consistent with <i>Geometric Decay</i>; GeoP-Calib's error is more
+          evenly distributed. Across KITTI-360 the mean depth MAE drops from
+          <b>0.294 to 0.244 (&minus;17%)</b>.
+        </figcaption>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================== BibTeX ===================== -->
+  <!-- ===================== Convergence videos ===================== -->
+  <section class="hero is-small">
+    <div class="container is-max-desktop sec">
+      <h2 class="title is-3 has-text-centered">Calibration in Motion</h2>
+      <p class="sec-lead">
+        Every sequence optimized from a perturbed initialization. The estimated camera pose
+        converges onto the ground truth, the projected LiDAR locks onto the image, and the
+        rotation and translation errors fall in step. Each clip is a 5&nbsp;&times;&nbsp;3 grid
+        &mdash; full screen is worth it.
+      </p>
+
+      <div class="fig">
+        <div class="panel-label">KITTI-360 &mdash; Seq. 1&ndash;5</div>
+        <video controls muted playsinline loop preload="none"
+               poster="static/video/convergence_kitti360_poster.jpg">
+          <source src="static/video/convergence_kitti360.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <div class="fig">
+        <div class="panel-label">KITTI &mdash; Seq. 1&ndash;5</div>
+        <video controls muted playsinline loop preload="none"
+               poster="static/video/convergence_kitti_poster.jpg">
+          <source src="static/video/convergence_kitti.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>
+          Top row: estimated vs. ground-truth camera pose relative to the LiDAR.
+          Middle: LiDAR points projected with the current extrinsics, with the live
+          rotation and translation error. Bottom: the 3DGS proxy being rendered along the way.
+        </figcaption>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    #BibTeX .container { min-width: 0; }
+    #BibTeX pre { overflow-x: auto; max-width: 100%; }
+  </style>
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3">BibTeX</h2>
+      <pre><code>@article{kwak2026geometry,
+  title={Geometry-Preserving in 3D Gaussian Splatting for LiDAR-Camera Extrinsic Calibration},
+  author={Kwak, Kyoleen and Kim, Daeho and Lee, Jeong Woon and Hwang, Hyoseok},
+  journal={arXiv preprint arXiv:2606.20103},
+  year={2026}
+}</code></pre>
+    </div>
+  </section>
+
+
+  <!-- ===================== Acknowledgments ===================== -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-4">Acknowledgments</h2>
+      <p style="font-size:0.9rem; color:#7a7a7a;">
+        This work was supported in part by the National Research Foundation of Korea (NRF) grant
+        funded by the Korean government (MSIT) under Grant No. RS-2025-00564137, in part by the
+        Convergence security core talent training business support program under Grant
+        IITP-2023-RS-2023-00266615, and in part by the Technology Innovation Program
+        (RS-2025-25453780, Development of a National Humanoid AI Robot Foundation Model for
+        Multi-Task Applications) funded by the Ministry of Trade Industry &amp; Resources
+        (MOTIR, Korea).
+      </p>
+    </div>
+  </section>
+
+
+
  
   <!-- End conclusion carousel -->
 
-  <!--BibTex citation -->
-  <!-- <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <h2 class="title">BibTeX</h2>
-      <pre><code>
-@InProceedings{Kwak_2026_AAAI,
-    author    = {Kwak, Kyoleen and Hwang, Hyoseok},
-    title     = {Enhancing Control Policy Smoothness by Aligning Actions with Predictions from Preceding States},
-    booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
-    month     = {January},
-    year      = {2026},
-    pages     = {}
-}</code></pre>
-    </div>
-</section> -->
-  <!--End BibTex citation -->
+
 
 
 
