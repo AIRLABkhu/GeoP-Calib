@@ -1,0 +1,25 @@
+name: GeoP-Calib
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - plyfile
+  - tqdm
+  - pip:
+    # CUDA 12.6 builds of PyTorch. The local version tags (+cu126) make pip
+    # resolve these from the PyTorch index rather than the default PyPI wheels.
+    - --extra-index-url https://download.pytorch.org/whl/cu126
+    - torch==2.9.0+cu126
+    - torchvision==0.24.0+cu126
+    - torchaudio==2.9.0+cu126
+    - opencv-python
+    - joblib
+    - scipy
+    - matplotlib
+    - open3d
+    - einops
+    - kornia
+    - loguru
+    - tensorboard
