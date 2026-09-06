@@ -18,7 +18,7 @@ Tested on Ubuntu 20.04 with CUDA 12.6, PyTorch 2.9.0 and an NVIDIA RTX 4070 Ti.
 Clone the repository together with its submodules:
 
 ```shell
-git clone --recursive https://github.com/airlabkhu/GeoP-Calib.git
+git clone --recursive https://github.com/AIRLABkhu/GeoP-Calib.git
 cd GeoP-Calib
 ```
 
